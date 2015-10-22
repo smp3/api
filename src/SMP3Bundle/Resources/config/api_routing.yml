@@ -1,0 +1,9 @@
+main_api:
+    resource: SMP3Bundle\Controller\APIController 
+    type: rest
+
+
+playlist:
+    type: rest
+    resource: SMP3Bundle\Controller\PlaylistController
+    
