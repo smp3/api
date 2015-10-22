@@ -25,7 +25,8 @@
         "symfony/finder": "*",
         "symfony/http-foundation": "*",
         "friendsofsymfony/jsrouting-bundle": "^1.5",
-        "lexik/jwt-authentication-bundle": "1.0.3"
+        "lexik/jwt-authentication-bundle": "1.0.3",
+        "nelmio/cors-bundle": "^1.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

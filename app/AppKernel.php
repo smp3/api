@@ -20,6 +20,7 @@ class AppKernel extends Kernel {
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
             new SMP3Bundle\SMP3Bundle(),
         );
 
