@@ -15,27 +15,41 @@ use SMP3Bundle\Form\PlaylistType;
  */
 class PlaylistController extends FOSRestController implements ClassResourceInterface {
 
+    public function getPlaylistsAction() {
+        $em = $this->getDoctrine()->getManager();
+        $playlists = $em->getRepository('SMP3Bundle:Playlist')->findAll();
+        $view = $this->view($playlists, 200);
+
+        return $this->handleView($view);
+    }
+
     public function getPlaylistAction(Playlist $playlist) {
         $view = $this->view($playlist, 200);
 
         return $this->handleView($view);
     }
 
-    public function postPlaylistAction(Request $request) {
+    public function postPlaylistAction() {
 
-        $form = $this->createForm(new PlaylistType($this->getUser()));
-        $form->bind($request);
-        
-        if($form->isValid()) {
-            die('valid');
+        $playlist = new Playlist();
+
+//        print_r($this->getRequest());
+//        die;
+        $status = 200;
+        $form = $this->createForm(new PlaylistType($this->getUser()), $playlist);
+        $form->bind($this->getRequest()->get('playlist'));
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $form->getData();
+            $entity->setUser($this->getUser());
+            $em->persist($entity);
+            $em->flush();
         } else {
-            var_dump($form->getErrors());
-            die('not valid');
+            $status = 500;
         }
-        
-        
-        return $this->handleView($view);
-        //die('postPlaylistAction');
+
+        return $this->handleView($this->view($form, $status));
     }
 
     public function putPlaylistAction($id) {

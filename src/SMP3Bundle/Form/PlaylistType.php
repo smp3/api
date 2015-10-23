@@ -23,9 +23,7 @@ class PlaylistType extends AbstractType {
                
     }
     
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        
-    }
+    
     
     public function getName() {
         return 'playlist';
