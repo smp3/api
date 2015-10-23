@@ -2,8 +2,6 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
-header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
 date_default_timezone_set('Europe/Warsaw');
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
