@@ -22,11 +22,11 @@ class LibraryFile {
      */
     protected $file_name;
 
+    
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    
     protected $user;
 
     public function getId() {

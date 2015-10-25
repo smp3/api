@@ -33,8 +33,6 @@ class PlaylistController extends FOSRestController implements ClassResourceInter
 
         $playlist = new Playlist();
 
-//        print_r($this->getRequest());
-//        die;
         $status = 200;
         $form = $this->createForm(new PlaylistType($this->getUser()), $playlist);
         $form->bind($this->getRequest()->get('playlist'));

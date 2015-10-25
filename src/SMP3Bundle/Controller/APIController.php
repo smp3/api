@@ -18,10 +18,20 @@ use SMP3Bundle\Entity\LibraryFile;
 class APIController extends FOSRestController implements ClassResourceInterface {
     protected $user;
   
+    protected $exts = ['mp3', 'mp4', 'ogg'];
+    
     protected function deleteEntity($entity, $key, $em) {
         $em->remove($entity);
     }
 
+    public function getDirectoriesAction() {
+        ///TODO: return directory tree or directories
+    }
+    
+    public function getFilesAction($directory) {
+        
+    }
+    
     public function getLibraryAction() {
         $em = $this->getDoctrine()->getManager();
         $files = $em->getRepository('SMP3Bundle:LibraryFile')->findAll();
@@ -44,6 +54,9 @@ class APIController extends FOSRestController implements ClassResourceInterface 
         }
 
         foreach ($finder as $file) {
+            if (!in_array($file->getExtension(), $this->exts)) {
+                continue;
+            }
             $lf = new LibraryFile();
             $lf->setFileName($file->getRelativePathname());
             $lf->setUser($this->getUser());
