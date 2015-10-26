@@ -22,12 +22,16 @@ class LibraryFile {
      */
     protected $file_name;
 
-    
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\FileInfo", orphanRemoval=true) 
+     */
+    protected $info;
 
     public function getId() {
         return $this->id;
@@ -37,10 +41,14 @@ class LibraryFile {
         return $this->file_name;
     }
 
-    function getUser() {
+    public function getUser() {
         return $this->user;
     }
-    
+
+    public function getInfo() {
+        return $this->info;
+    }
+
     public function setFileName($file_name) {
         $this->file_name = $file_name;
     }
@@ -48,11 +56,13 @@ class LibraryFile {
     public function setId($id) {
         $this->id = $id;
     }
-    
+
     function setUser($user) {
         $this->user = $user;
     }
-    
-   
+
+    public function setInfo($info) {
+        $this->info = $info;
+    }
 
 }
