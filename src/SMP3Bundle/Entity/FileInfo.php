@@ -34,7 +34,7 @@ class FileInfo {
 
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned": true, "default": 0})
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned": true, "default": 0})
      */
     protected $track_number;
     

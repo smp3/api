@@ -12,3 +12,4 @@
 /web/assets/
 *.php~
 /web/js
+/nbproject/private/
