@@ -19,11 +19,13 @@ class FileInfoService {
 
         $comments = [];
 
-        foreach ($this->set_tags as $tag) {
-            $comments[$tag] = null;
-        }
+
 
         if (array_key_exists('comments', $info)) {
+            foreach ($this->set_tags as $tag) {
+                $comments[$tag] = null;
+            }
+
             foreach ($info['comments'] as $key => $comment) {
                 if (is_array($comment) && count($comment) == 1) {
                     $comments[$key] = $comment[0];
@@ -39,9 +41,12 @@ class FileInfoService {
                     $comments['track_number'] = $parts[0];
                 }
             }
+            return $comments;
+        } else {
+            return null;
         }
-        //var_dump($comments);
-        return $comments;
+
+        
     }
 
 }

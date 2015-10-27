@@ -3,6 +3,7 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Accessor;
 
 /**
  * @ORM\Entity
@@ -63,6 +64,14 @@ class LibraryFile {
 
     public function setInfo($info) {
         $this->info = $info;
+    }
+    
+    public function getTrackTitle() {
+        if($this->info) {
+            return $this->info->getTitle();
+        } else {
+            return $this->file_name;
+        }
     }
 
 }

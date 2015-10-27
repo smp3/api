@@ -41,7 +41,7 @@ class APIController extends FOSRestController implements ClassResourceInterface 
     }
 
     public function getDiscoverAction() {
-  
+
         $info_service = $this->container->get('FileInfoService');
         $finder = new Finder();
         $finder->files()->in($this->getUser()->getPath());
@@ -62,18 +62,22 @@ class APIController extends FOSRestController implements ClassResourceInterface 
             }
 
             $info_data = $info_service->getTagInfo($file);
-           
-            $file_info = new FileInfo();
-            $file_info->setTrackNumber($info_data['track_number']);
-            $file_info->setArtist($info_data['artist']);
-            $file_info->setAlbum($info_data['album']);
-            $file_info->setTitle($info_data['title']);
-            $em->persist($file_info);
-            
+
             $lf = new LibraryFile();
+
+            if ($info_data) {
+                $file_info = new FileInfo();
+                $file_info->setTrackNumber($info_data['track_number']);
+                $file_info->setArtist($info_data['artist']);
+                $file_info->setAlbum($info_data['album']);
+                $file_info->setTitle($info_data['title']);
+                $em->persist($file_info);
+                $lf->setInfo($file_info);
+            }
+
             $lf->setFileName($file->getRelativePathname());
             $lf->setUser($this->getUser());
-            $lf->setInfo($file_info);
+
             $em->persist($lf);
             $counter++;
         }
