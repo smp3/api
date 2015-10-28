@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\MimeType\FileBinaryMimeTypeGuesser;
 use SMP3Bundle\Entity\LibraryFile;
 use SMP3Bundle\Entity\FileInfo;
+use FOS\RestBundle\View\View;
 
 /**
  * @RouteResource("")
@@ -35,9 +36,12 @@ class APIController extends FOSRestController implements ClassResourceInterface 
     public function getLibraryAction() {
         $em = $this->getDoctrine()->getManager();
         $files = $em->getRepository('SMP3Bundle:LibraryFile')->findAll();
-        $view = $this->view($files, 200);
-
+        //$view = $this->view($files, 200);
+        $view = View::create();
+        $view->setData($files);
+ 
         return $this->handleView($view);
+        
     }
 
     public function getDiscoverAction() {
