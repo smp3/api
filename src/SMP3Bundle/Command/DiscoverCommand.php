@@ -25,6 +25,7 @@ class DiscoverCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $library = $this->getContainer()->get('LibraryService');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine')->getManager();
         $users = [];

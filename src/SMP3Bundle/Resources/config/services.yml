@@ -1,4 +1,8 @@
 services:
     FileInfoService:
         class: SMP3Bundle\Service\FileInfoService
-        arguments: []     
+        arguments: [] 
+    LibraryService:
+        class: SMP3Bundle\Service\LibraryService
+        arguments: ['@service_container']
+    
