@@ -19,8 +19,14 @@ use SMP3Bundle\Form\PlaylistType;
 class PlaylistController extends APIBaseController implements ClassResourceInterface {
 
     public function getPlaylistsAction() {
-        $em = $this->getDoctrine()->getManager();
-        $playlists = $em->getRepository('SMP3Bundle:Playlist')->findAll();
+        
+        $playlists = $this->em->getRepository('SMP3Bundle:Playlist')->findAll();
+         
+//        foreach($playlists as $playlist) {
+//            $files = $playlist->getPlaylistFiles();
+//            $playlist->setPlaylistFiles($this->container->get('FileInfoService')->addTrackTitles($files));
+//        }
+        
         $view = $this->view($playlists, 200);
 
         return $this->handleView($view);

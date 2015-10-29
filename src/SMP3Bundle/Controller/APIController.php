@@ -32,10 +32,7 @@ class APIController extends APIBaseController implements ClassResourceInterface 
     public function getLibraryAction() {
        
         $files = $this->em->getRepository('SMP3Bundle:LibraryFile')->findAll();
-;
-        foreach($files as &$file) {
-            $file->track_title = $file->getTrackTitle();
-        }
+        $this->container->get('FileInfoService')->addTrackTitles($files);
         $view = View::create();
         $view->setData($files);
  

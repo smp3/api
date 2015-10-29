@@ -13,6 +13,13 @@ class FileInfoService {
         $this->tag_info = new \getID3;
     }
 
+    public function addTrackTitles(&$files) {
+        foreach($files as &$file) {
+            $file->track_title = $file->getTrackTitle();
+        }
+        return $files;
+    }
+    
     public function getTagInfo($file_path) {
         $info = $this->tag_info->analyze($file_path);
         \getid3_lib::CopyTagsToComments($info);
