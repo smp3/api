@@ -19,12 +19,7 @@ use FOS\RestBundle\View\View;
 class APIController extends FOSRestController implements ClassResourceInterface {
 
     protected $user;
-    protected $exts = ['mp3', 'mp4', 'ogg', 'm4a'];
-
-    protected function deleteEntity($entity, $key, $em) {
-        $em->remove($entity);
-    }
-
+    
     public function getDirectoriesAction() {
         ///TODO: return directory tree or directories
     }
@@ -46,47 +41,9 @@ class APIController extends FOSRestController implements ClassResourceInterface 
 
     public function getDiscoverAction() {
 
-        $info_service = $this->container->get('FileInfoService');
-        $finder = new Finder();
-        $finder->files()->in($this->getUser()->getPath());
-        $em = $this->getDoctrine()->getManager();
-        $all = $em->getRepository('SMP3Bundle:LibraryFile')->findAll();
-
-        $info = new \stdClass();
-
-        if (count($all)) {
-            array_walk($all, array($this, 'deleteEntity'), $em);
-            $em->flush();
-        }
-
-        $counter = 0;
-        foreach ($finder as $file) {
-            if (!in_array($file->getExtension(), $this->exts)) {
-                continue;
-            }
-
-            $info_data = $info_service->getTagInfo($file);
-
-            $lf = new LibraryFile();
-
-            if ($info_data) {
-                $file_info = new FileInfo();
-                $file_info->setTrackNumber($info_data['track_number']);
-                $file_info->setArtist($info_data['artist']);
-                $file_info->setAlbum($info_data['album']);
-                $file_info->setTitle($info_data['title']);
-                $em->persist($file_info);
-                $lf->setInfo($file_info);
-            }
-
-            $lf->setFileName($file->getRelativePathname());
-            $lf->setUser($this->getUser());
-
-            $em->persist($lf);
-            $counter++;
-        }
-
-        $em->flush();
+        $library_service = $this->container->get('LibraryService');
+        
+        $counter = $library_service->discover($this->getUser());
 
         return $this->handleView($this->view($counter, 200));
     }

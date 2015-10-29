@@ -20,10 +20,6 @@ class DiscoverCommand extends ContainerAwareCommand {
         ;
     }
 
-    protected function discover($user) {
-        $this->output->writeln($user->getUsername());
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output) {
         $library = $this->getContainer()->get('LibraryService');
         $this->output = $output;
@@ -39,7 +35,7 @@ class DiscoverCommand extends ContainerAwareCommand {
         }
 
         foreach($users as $user) {
-            $this->discover($user);
+            $library->discover($user);
         }
 
         
