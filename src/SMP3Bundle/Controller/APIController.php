@@ -2,7 +2,7 @@
 
 namespace SMP3Bundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
+
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Symfony\Component\Finder\Finder;
@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\MimeType\FileBinaryMimeTypeGuesser;
 use SMP3Bundle\Entity\LibraryFile;
 use SMP3Bundle\Entity\FileInfo;
+use SMP3Bundle\Controller\APIBaseController;
 use FOS\RestBundle\View\View;
 
 /**
  * @RouteResource("")
  */
-class APIController extends FOSRestController implements ClassResourceInterface {
+class APIController extends APIBaseController implements ClassResourceInterface {
 
     protected $user;
     
@@ -29,8 +30,8 @@ class APIController extends FOSRestController implements ClassResourceInterface 
     }
 
     public function getLibraryAction() {
-        $em = $this->getDoctrine()->getManager();
-        $files = $em->getRepository('SMP3Bundle:LibraryFile')->findAll();
+       
+        $files = $this->em->getRepository('SMP3Bundle:LibraryFile')->findAll();
 ;
         foreach($files as &$file) {
             $file->track_title = $file->getTrackTitle();
@@ -51,8 +52,7 @@ class APIController extends FOSRestController implements ClassResourceInterface 
     }
 
     public function getStreamAction($file_id) {
-        $em = $this->getDoctrine()->getManager();
-        $file = $em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(array('id' => $file_id));
+        $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(array('id' => $file_id));
         $file_name = $file->getUser()->getPath() . '/' . $file->getFileName();
         $file_contents = new File($file_name);
 

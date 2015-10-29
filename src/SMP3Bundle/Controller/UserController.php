@@ -3,7 +3,6 @@
 namespace SMP3Bundle\Controller;
 
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -11,14 +10,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
-
+use SMP3Bundle\Controller\APIBaseController;
 use SMP3Bundle\Entity\User;
 use SMP3Bundle\Form\UserType;
 
 /**
  * @RouteResource("user")
  */
-class UserController extends FOSRestController implements ClassResourceInterface {
+class UserController extends APIBaseController implements ClassResourceInterface {
 
     function getCurrentAction() {
         return $this->handleView($this->view($this->getUser(), 200));

@@ -4,7 +4,7 @@ namespace SMP3Bundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Controller\FOSRestController;
+use SMP3Bundle\Controller\APIBaseController;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -16,7 +16,7 @@ use SMP3Bundle\Form\PlaylistType;
 /**
  * @RouteResource("")
  */
-class PlaylistController extends FOSRestController implements ClassResourceInterface {
+class PlaylistController extends APIBaseController implements ClassResourceInterface {
 
     public function getPlaylistsAction() {
         $em = $this->getDoctrine()->getManager();
