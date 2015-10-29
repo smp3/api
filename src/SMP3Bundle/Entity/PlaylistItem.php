@@ -44,7 +44,7 @@ class PlaylistItem {
      *
      * @return PlaylistItem
      */
-    public function setPlaylist(\SMP3Bundle\Entity\Playlist $playlist = null)
+    public function setPlaylist(\SMP3Bundle\Entity\Playlist $playlist)
     {
         $this->playlist = $playlist;
 
@@ -68,7 +68,7 @@ class PlaylistItem {
      *
      * @return PlaylistItem
      */
-    public function setFile(\SMP3Bundle\Entity\LibraryFile $file = null)
+    public function setFile(\SMP3Bundle\Entity\LibraryFile $file)
     {
         $this->file = $file;
 

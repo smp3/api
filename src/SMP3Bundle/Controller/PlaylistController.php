@@ -6,8 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\View\View;
 use SMP3Bundle\Entity\Playlist;
+use SMP3Bundle\Entity\PlaylistItem;
 use SMP3Bundle\Form\PlaylistType;
 
 /**
@@ -29,33 +32,50 @@ class PlaylistController extends FOSRestController implements ClassResourceInter
         return $this->handleView($view);
     }
 
-    public function postPlaylistAction() {
+    public function postPlaylistAction(Request $request) {
+
+
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent());
+        
+        if (empty($data) || !array_key_exists('playlist', $data)) {
+            throw new \Exception("Bad params");
+        }
 
         $playlist = new Playlist();
 
-        $status = 200;
-        $form = $this->createForm(new PlaylistType($this->getUser()), $playlist);
-        $form->bind($this->getRequest()->get('playlist'));
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $form->getData();
-            $entity->setUser($this->getUser());
-            $em->persist($entity);
-            $em->flush();
-        } else {
-            $status = 500;
+        $playlist->setTitle($data->playlist->title);
+        $em->persist($playlist);
+        $em->flush();
+        
+        foreach ($data->playlist->items as $item) {
+            $playlist_item = new PlaylistItem();
+            $file = $em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->file_id]);
+            $playlist_item->setFile($file);
+            $playlist_item->setPlaylist($playlist);
+            $em->persist($playlist_item);
+            $playlist->addPlaylistFile($playlist_item);
         }
 
-        return $this->handleView($this->view($form, $status));
+        $em->persist($playlist);
+        $em->flush();
+
+        return $this->handleView($this->view("OK", 200));
+        
     }
 
     public function putPlaylistAction($id) {
         die('putPlaylistAction');
     }
 
-    public function deletePlaylistAction($id) {
-        die('deletePlaylistAction');
+    public function deletePlaylistAction(Playlist $playlist) {
+        $em = $this->getDoctrine()->getManager();
+        foreach($playlist->getPlaylistFiles() as $file) {
+            $em->remove($file);
+        }
+        $em->remove($playlist);
+        $em->flush();
+        return $this->handleView($this->view("OK", 200)); 
     }
 
 }

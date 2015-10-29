@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use SMP3Bundle\Entity\User;
+use SMP3Bundle\Entity\PlaylistItem;
 
 class PlaylistType extends AbstractType {
     protected $user;
@@ -18,6 +19,7 @@ class PlaylistType extends AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('title')
+                ->add('playlist_files','collection', ['type'=>new PlaylistItem(), 'required'=>false])
                
                 ;
                
