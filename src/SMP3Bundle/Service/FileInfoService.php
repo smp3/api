@@ -22,9 +22,7 @@ class FileInfoService {
 
 
         if (array_key_exists('comments', $info)) {
-            foreach ($this->set_tags as $tag) {
-                $comments[$tag] = null;
-            }
+
 
             foreach ($info['comments'] as $key => $comment) {
                 if (is_array($comment) && count($comment) == 1) {
@@ -35,18 +33,28 @@ class FileInfoService {
             }
 
 
-            if ($comments['track_number'] && strstr($comments['track_number'], '/')) {
+            if (array_key_exists('track_number', $comments) && strstr($comments['track_number'], '/')) {
                 $parts = explode('/', $comments['track_number']);
                 if (is_numeric($parts[0])) {
                     $comments['track_number'] = $parts[0];
                 }
             }
+            $empty_count = 0;
+            foreach ($this->set_tags as $tag) {
+                if (!array_key_exists($tag, $comments)) {
+                    $comments[$tag] = null;
+                    $empty_count ++;
+                }
+            }
+            
+            if($empty_count == count($this->set_tags)) {
+                $comments = null;
+            }
+
             return $comments;
         } else {
             return null;
         }
-
-        
     }
 
 }
