@@ -19,23 +19,21 @@ use SMP3Bundle\Form\PlaylistType;
 class PlaylistController extends APIBaseController implements ClassResourceInterface {
 
     public function getPlaylistsAction() {
-        
+
         $playlists = $this->em->getRepository('SMP3Bundle:Playlist')->findAll();
-         
+
 //        foreach($playlists as $playlist) {
 //            $files = $playlist->getPlaylistFiles();
 //            $playlist->setPlaylistFiles($this->container->get('FileInfoService')->addTrackTitles($files));
 //        }
-        
+
         $view = $this->view($playlists, 200);
 
         return $this->handleView($view);
     }
 
     public function getPlaylistAction(Playlist $playlist) {
-        $view = $this->view($playlist, 200);
-
-        return $this->handleView($view);
+        return $this->handleView($this->view($playlist, 200));
     }
 
     public function postPlaylistAction(Request $request) {
@@ -43,7 +41,7 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
 
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
-        
+
         if (empty($data) || !array_key_exists('playlist', $data)) {
             throw new \Exception("Bad params");
         }
@@ -53,7 +51,7 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         $playlist->setTitle($data->playlist->title);
         $em->persist($playlist);
         $em->flush();
-        
+
         foreach ($data->playlist->items as $item) {
             $playlist_item = new PlaylistItem();
             $file = $em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->file_id]);
@@ -67,7 +65,6 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         $em->flush();
 
         return $this->handleView($this->view("OK", 200));
-        
     }
 
     public function putPlaylistAction($id) {
@@ -76,12 +73,12 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
 
     public function deletePlaylistAction(Playlist $playlist) {
         $em = $this->getDoctrine()->getManager();
-        foreach($playlist->getPlaylistFiles() as $file) {
+        foreach ($playlist->getPlaylistFiles() as $file) {
             $em->remove($file);
         }
         $em->remove($playlist);
         $em->flush();
-        return $this->handleView($this->view("OK", 200)); 
+        return $this->handleView($this->view("OK", 200));
     }
 
 }
