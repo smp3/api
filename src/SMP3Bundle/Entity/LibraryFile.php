@@ -3,7 +3,6 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Accessor;
 
 /**
  * @ORM\Entity
@@ -33,6 +32,8 @@ class LibraryFile {
      * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\FileInfo", orphanRemoval=true) 
      */
     protected $info;
+    
+    public $track_title;
 
     public function getId() {
         return $this->id;
@@ -70,7 +71,7 @@ class LibraryFile {
         if($this->info) {
             return $this->info->getTitle();
         } else {
-            return $this->file_name;
+            return basename($this->file_name);
         }
     }
 

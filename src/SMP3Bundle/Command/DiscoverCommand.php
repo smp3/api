@@ -27,7 +27,7 @@ class DiscoverCommand extends ContainerAwareCommand {
         $users = [];
         $username = $input->getArgument('username');
         if ($username) {
-            $output->writeln("Discovering files for " . $username);
+            $output->writeln("Discovering files for $username");
             $users = $em->getRepository('SMP3Bundle:User')->findByUsername($username);
         } else {
             $output->writeln("Discovering files for all users");
@@ -38,7 +38,6 @@ class DiscoverCommand extends ContainerAwareCommand {
             $library->discover($user);
         }
 
-        
     }
 
 }

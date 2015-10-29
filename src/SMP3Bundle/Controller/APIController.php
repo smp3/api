@@ -31,12 +31,14 @@ class APIController extends FOSRestController implements ClassResourceInterface 
     public function getLibraryAction() {
         $em = $this->getDoctrine()->getManager();
         $files = $em->getRepository('SMP3Bundle:LibraryFile')->findAll();
-        //$view = $this->view($files, 200);
+;
+        foreach($files as &$file) {
+            $file->track_title = $file->getTrackTitle();
+        }
         $view = View::create();
         $view->setData($files);
  
-        return $this->handleView($view);
-        
+        return $this->handleView($view);  
     }
 
     public function getDiscoverAction() {
