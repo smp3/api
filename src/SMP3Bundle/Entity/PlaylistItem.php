@@ -19,11 +19,13 @@ class PlaylistItem {
     
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Playlist", inversedBy="playlist_files")
+     * @ORM\JoinColumn(name="playlist_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $playlist;
     
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\LibraryFile")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $file;
 

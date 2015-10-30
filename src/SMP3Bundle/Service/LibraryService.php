@@ -14,6 +14,25 @@ class LibraryService {
 
     public function __construct($container) {
         $this->container = $container;
+        $this->em = $this->container->get('doctrine')->getManager();
+    }
+
+    protected function setLibraryFile(LibraryFile $library_file, FileInfo $file_info, User $user, $file, $info_data) {
+
+        $library_file->setFileName($file->getRelativePathname());
+        $library_file->setUser($user);
+
+        if ($info_data) {
+            $file_info = new FileInfo();
+            $file_info->setTrackNumber($info_data['track_number']);
+            $file_info->setArtist($info_data['artist']);
+            $file_info->setAlbum($info_data['album']);
+            $file_info->setTitle($info_data['title']);
+            $this->em->persist($file_info);
+            $library_file->setInfo($file_info);
+        }
+
+        $this->em->persist($library_file);
     }
 
     public function discover(User $user) {
@@ -58,7 +77,7 @@ class LibraryService {
         }
 
         $em->flush();
-        
+
         return $counter;
     }
 
