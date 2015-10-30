@@ -21,7 +21,7 @@ class LibraryService {
         $finder = new Finder();
         $finder->files()->in($user->getPath());
         $em = $this->container->get('doctrine')->getManager();
-        $all = $em->getRepository('SMP3Bundle:LibraryFile')->findByUser($user); //TODO: bind by user
+        $all = $em->getRepository('SMP3Bundle:LibraryFile')->findByUser($user);
 
         if (count($all)) {
             foreach ($all as $entity) {
