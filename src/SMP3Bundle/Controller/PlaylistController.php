@@ -40,8 +40,9 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
 
 
         $em = $this->getDoctrine()->getManager();
+       
         $data = json_decode($request->getContent());
-
+        
         if (empty($data) || !array_key_exists('playlist', $data)) {
             throw new \Exception("Bad params");
         }
@@ -52,9 +53,10 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         $em->persist($playlist);
         $em->flush();
 
-        foreach ($data->playlist->items as $item) {
+        foreach ($data->playlist->playlist_files as $item) {
             $playlist_item = new PlaylistItem();
-            $file = $em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->file_id]);
+            $item = $item->file;
+            $file = $em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->id]);
             $playlist_item->setFile($file);
             $playlist_item->setPlaylist($playlist);
             $em->persist($playlist_item);
@@ -67,8 +69,16 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         return $this->handleView($this->view("OK", 200));
     }
 
-    public function putPlaylistAction($id) {
-        die('putPlaylistAction');
+    public function putPlaylistAction(Request $request, Playlist $playlist) {
+
+        foreach($playlist->getPlaylistFiles() as $file) {
+           $this->em->remove($file); 
+        }
+        
+        $this->em->remove($playlist);
+        $this->em->flush();
+        
+        return $this->postPlaylistAction($request);
     }
 
     public function deletePlaylistAction(Playlist $playlist) {
