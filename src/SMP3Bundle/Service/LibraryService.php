@@ -17,13 +17,13 @@ class LibraryService {
         $this->em = $this->container->get('doctrine')->getManager();
     }
 
-    protected function setLibraryFile(LibraryFile $library_file, FileInfo $file_info, User $user, $file, $info_data) {
+    protected function setLibraryFile(LibraryFile $library_file, FileInfo $file_info, User $user, $file, $info_data, $md5) {
 
         $library_file->setFileName($file->getRelativePathname());
+        $library_file->setMD5($md5);
         $library_file->setUser($user);
 
         if ($info_data) {
-            $file_info = new FileInfo();
             $file_info->setTrackNumber($info_data['track_number']);
             $file_info->setArtist($info_data['artist']);
             $file_info->setAlbum($info_data['album']);
@@ -35,19 +35,32 @@ class LibraryService {
         $this->em->persist($library_file);
     }
 
+    protected function removeOrphaned($user) {
+        $em = $this->container->get('doctrine')->getManager();
+        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
+        $all = $repository->findByUser($user);
+        $counter = 0;
+
+        foreach ($all as $file) {
+            if (!file_exists($user->getPath() . '/' . $file->getFileName())) {
+                $em->remove($file);
+                $counter++;
+            }
+        }
+        
+        $em->flush();
+        
+        return $counter;
+    }
+
     public function discover(User $user) {
         $info_service = $this->container->get('FileInfoService');
         $finder = new Finder();
         $finder->files()->in($user->getPath());
         $em = $this->container->get('doctrine')->getManager();
-        $all = $em->getRepository('SMP3Bundle:LibraryFile')->findByUser($user);
+        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
 
-        if (count($all)) {
-            foreach ($all as $entity) {
-                $em->remove($entity);
-            }
-            $em->flush();
-        }
+        $this->removeOrphaned($user);
 
         $counter = 0;
         foreach ($finder as $file) {
@@ -57,24 +70,19 @@ class LibraryService {
 
             $info_data = $info_service->getTagInfo($file);
 
-            $lf = new LibraryFile();
+            $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
+            $md5 = md5($contents);
 
-            if ($info_data) {
+            $lf = $repository->findOneBy(array('md5' => $md5));
+
+            if ($lf) {
+                $file_info = $lf->getInfo();
+            } else {
                 $file_info = new FileInfo();
-                $file_info->setTrackNumber($info_data['track_number']);
-                $file_info->setArtist($info_data['artist']);
-                $file_info->setAlbum($info_data['album']);
-                $file_info->setTitle($info_data['title']);
-                $em->persist($file_info);
-                $lf->setInfo($file_info);
+                $lf = new LibraryFile();
             }
 
-            $contents = $file->getRelativePathname();
-            $lf->setFileName($file->getRelativePathname());
-            $lf->setUser($user);
-            $lf->setMD5(md5($contents));
-            
-            $em->persist($lf);
+            $this->setLibraryFile($lf, $file_info, $user, $file, $info_data, $md5);
             $counter++;
         }
 
