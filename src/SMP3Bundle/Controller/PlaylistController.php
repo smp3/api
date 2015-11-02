@@ -22,11 +22,6 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
 
         $playlists = $this->em->getRepository('SMP3Bundle:Playlist')->findAll();
 
-//        foreach($playlists as $playlist) {
-//            $files = $playlist->getPlaylistFiles();
-//            $playlist->setPlaylistFiles($this->container->get('FileInfoService')->addTrackTitles($files));
-//        }
-
         $view = $this->view($playlists, 200);
 
         return $this->handleView($view);
