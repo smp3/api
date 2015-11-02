@@ -69,9 +69,11 @@ class LibraryService {
                 $lf->setInfo($file_info);
             }
 
+            $contents = $file->getRelativePathname();
             $lf->setFileName($file->getRelativePathname());
             $lf->setUser($user);
-
+            $lf->setMD5(md5($contents));
+            
             $em->persist($lf);
             $counter++;
         }

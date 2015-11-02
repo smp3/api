@@ -33,6 +33,11 @@ class LibraryFile {
      */
     protected $info;
     
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $md5;
+    
     public $track_title;
 
     public function getId() {
@@ -51,6 +56,10 @@ class LibraryFile {
         return $this->info;
     }
 
+    public function getMD5() {
+        return $this->md5;
+    }
+    
     public function setFileName($file_name) {
         $this->file_name = $file_name;
     }
@@ -73,6 +82,10 @@ class LibraryFile {
         } else {
             return basename($this->file_name);
         }
+    }
+    
+    public function setMD5($md5) {
+        $this->md5 = $md5;
     }
 
 }
