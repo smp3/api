@@ -23,8 +23,7 @@ class UserController extends APIBaseController implements ClassResourceInterface
     function getCurrentAction() {
         return $this->handleView($this->view($this->getUser(), 200));
     }
-    
-    
+
     function getAction(User $user) {
         return $this->handleView($this->view($user, 200));
     }
@@ -32,63 +31,40 @@ class UserController extends APIBaseController implements ClassResourceInterface
     function getAllAction() {
 
         return $this->handleView($this->view(
-                $this->getDoctrine()->getManager()->getRepository('SMP3Bundle:User')->findAll()
-                ), 200);
+                                $this->getDoctrine()->getManager()->getRepository('SMP3Bundle:User')->findAll()
+                        ), 200);
+    }
+
+    protected function setUserData(Request $request, User $user) {
+        $data = json_decode($request->getContent());
+
+        $user->setNN('username', $data->username);
+        $user->setNN('path', $data->path);
+        $user->setNN('email', $data->email);
+        
+        if($data->password1) {
+            $user->setPlainPassword($data->password1);
+        }
+        
     }
     
+    
     function putAction(Request $request, User $user) {
-        
-       
-        $data = json_decode($request->getContent());
-        
-        $user->setNN('username', $data->username);
-        
+
+        $this->setUserData($request, $user);
         $this->em->persist($user);
         $this->em->flush();
         
-        print_r($data);
         return $this->handleView($this->view('test'));
     }
-    
-    function postAction() {
-       
-        $formFactory = $this->container->get('fos_user.registration.form.factory');
+
+    function postAction(Request $request) {
         $userManager = $this->container->get('fos_user.user_manager');
-        $dispatcher = $this->container->get('event_dispatcher');
-
         $user = $userManager->createUser();
+        $this->setUserData($request, $user);
         $user->setEnabled(true);
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        $jsonData = json_decode($request->getContent(), true); // "true" to get an associative array
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($jsonData);
-
-            if ($form->isValid()) {
-                $event = new FormEvent($form, $request);
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-
-                $userManager->updateUser($user);
-
-                $response = new Response("User created.", 201);               
-
-                return $response;
-            }
-        }
-
-        $view = View::create($form, 400);
-        return $this->get('fos_rest.view_handler')->handle($view);
-    
+        $userManager->updateUser($user, true);
+        return $this->handleView($this->view('postuser'));
     }
 
 }
