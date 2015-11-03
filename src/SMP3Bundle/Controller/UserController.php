@@ -2,6 +2,7 @@
 
 namespace SMP3Bundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -35,7 +36,17 @@ class UserController extends APIBaseController implements ClassResourceInterface
                 ), 200);
     }
     
-    function putAction(User $user) {
+    function putAction(Request $request, User $user) {
+        
+       
+        $data = json_decode($request->getContent());
+        
+        $user->setNN('username', $data->username);
+        
+        $this->em->persist($user);
+        $this->em->flush();
+        
+        print_r($data);
         return $this->handleView($this->view('test'));
     }
     

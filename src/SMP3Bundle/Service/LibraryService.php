@@ -17,7 +17,7 @@ class LibraryService {
         $this->em = $this->container->get('doctrine')->getManager();
     }
 
-    protected function setLibraryFile(LibraryFile $library_file, FileInfo $file_info, User $user, $file, $info_data, $md5) {
+    protected function setLibraryFile(LibraryFile $library_file, $file_info, User $user, $file, $info_data, $md5) {
 
         $library_file->setFileName($file->getRelativePathname());
         $library_file->setMD5($md5);
@@ -47,9 +47,9 @@ class LibraryService {
                 $counter++;
             }
         }
-        
+
         $em->flush();
-        
+
         return $counter;
     }
 
@@ -89,6 +89,17 @@ class LibraryService {
         $em->flush();
 
         return $counter;
+    }
+
+    public function clear(User $user) {
+        $em = $this->container->get('doctrine')->getManager();
+        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
+        $all = $repository->findByUser($user);
+        foreach ($all as $file) {
+            $em->remove($file);
+        }
+
+        $em->flush();
     }
 
 }
