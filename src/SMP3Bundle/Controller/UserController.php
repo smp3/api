@@ -49,13 +49,19 @@ class UserController extends APIBaseController implements ClassResourceInterface
     }
     
     
+    function deleteAction(User $user) {
+        $this->em->remove($user);
+        $this->em->flush();
+        return $this->handleView($this->view('OK'));
+    }
+    
     function putAction(Request $request, User $user) {
 
         $this->setUserData($request, $user);
         $this->em->persist($user);
         $this->em->flush();
         
-        return $this->handleView($this->view('test'));
+        return $this->handleView($this->view('OK'));
     }
 
     function postAction(Request $request) {
@@ -64,7 +70,7 @@ class UserController extends APIBaseController implements ClassResourceInterface
         $this->setUserData($request, $user);
         $user->setEnabled(true);
         $userManager->updateUser($user, true);
-        return $this->handleView($this->view('postuser'));
+        return $this->handleView($this->view('OK'));
     }
 
 }
