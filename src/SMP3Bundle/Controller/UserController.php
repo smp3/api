@@ -22,6 +22,11 @@ class UserController extends APIBaseController implements ClassResourceInterface
     function getCurrentAction() {
         return $this->handleView($this->view($this->getUser(), 200));
     }
+    
+    
+    function getAction(User $user) {
+        return $this->handleView($this->view($user, 200));
+    }
 
     function getAllAction() {
 
