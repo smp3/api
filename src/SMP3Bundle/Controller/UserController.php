@@ -35,6 +35,10 @@ class UserController extends APIBaseController implements ClassResourceInterface
                 ), 200);
     }
     
+    function putAction(User $user) {
+        return $this->handleView($this->view('test'));
+    }
+    
     function postAction() {
        
         $formFactory = $this->container->get('fos_user.registration.form.factory');
