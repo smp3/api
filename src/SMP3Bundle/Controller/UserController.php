@@ -42,7 +42,7 @@ class UserController extends APIBaseController implements ClassResourceInterface
         $user->setNN('path', $data->path);
         $user->setNN('email', $data->email);
         
-        if($data->password1) {
+        if(isset($data->password1)) {
             $user->setPlainPassword($data->password1);
         }
         
