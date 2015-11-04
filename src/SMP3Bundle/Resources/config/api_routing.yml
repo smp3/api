@@ -1,5 +1,5 @@
 main_api:
-    resource: SMP3Bundle\Controller\APIController 
+    resource: SMP3Bundle\Controller\LibraryController 
     type: rest
 
 

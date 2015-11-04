@@ -13,11 +13,12 @@ use SMP3Bundle\Entity\LibraryFile;
 use SMP3Bundle\Entity\FileInfo;
 use SMP3Bundle\Controller\APIBaseController;
 use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations\Get;
 
 /**
- * @RouteResource("")
+ * @RouteResource("library")
  */
-class APIController extends APIBaseController implements ClassResourceInterface {
+class LibraryController extends APIBaseController implements ClassResourceInterface {
 
     protected $user;
     
@@ -29,7 +30,7 @@ class APIController extends APIBaseController implements ClassResourceInterface 
         
     }
 
-    public function getLibraryAction() {
+    public function getAction() {
        
         $files = $this->em->getRepository('SMP3Bundle:LibraryFile')->findByUser($this->getUser());
         $this->container->get('FileInfoService')->addTrackTitles($files);
@@ -47,7 +48,9 @@ class APIController extends APIBaseController implements ClassResourceInterface 
 
         return $this->handleView($this->view($counter, 200));
     }
-
+    /**
+     * @Get("/stream/{file_id}")
+     */
     public function getStreamAction($file_id) {
         $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(array('id' => $file_id));
         $file_name = $file->getUser()->getPath() . '/' . $file->getFileName();
