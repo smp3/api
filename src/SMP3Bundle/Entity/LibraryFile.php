@@ -29,9 +29,9 @@ class LibraryFile {
     protected $user;
 
     /**
-     * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\FileInfo", orphanRemoval=true) 
+     * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\Track", orphanRemoval=true) 
      */
-    protected $info;
+    protected $track;
     
     /**
      * @ORM\Column(type="string")
@@ -52,8 +52,8 @@ class LibraryFile {
         return $this->user;
     }
 
-    public function getInfo() {
-        return $this->info;
+    public function getTrack() {
+        return $this->track;
     }
 
     public function getMD5() {
@@ -72,8 +72,8 @@ class LibraryFile {
         $this->user = $user;
     }
 
-    public function setInfo($info) {
-        $this->info = $info;
+    public function setTrack($track) {
+        $this->track = $track;
     }
     
     public function getTrackTitle() {

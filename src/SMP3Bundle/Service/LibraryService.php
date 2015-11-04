@@ -5,7 +5,7 @@ namespace SMP3Bundle\Service;
 use Symfony\Component\Finder\Finder;
 use SMP3Bundle\Entity\User;
 use SMP3Bundle\Entity\LibraryFile;
-use SMP3Bundle\Entity\FileInfo;
+use SMP3Bundle\Entity\Track;
 
 class LibraryService {
 
@@ -17,20 +17,20 @@ class LibraryService {
         $this->em = $this->container->get('doctrine')->getManager();
     }
 
-    protected function setLibraryFile(LibraryFile $library_file, $file_info, User $user, $file, $info_data, $md5) {
+    protected function setLibraryFile(LibraryFile $library_file, $track_info, User $user, $file, $info_data, $md5) {
 
         $library_file->setFileName($file->getRelativePathname());
         $library_file->setMD5($md5);
         $library_file->setUser($user);
 
-        if ($info_data) {
-            $file_info->setTrackNumber($info_data['track_number']);
-            $file_info->setArtist($info_data['artist']);
-            $file_info->setAlbum($info_data['album']);
-            $file_info->setTitle($info_data['title']);
-            $this->em->persist($file_info);
-            $library_file->setInfo($file_info);
-        }
+//        if ($info_data) {
+//            $file_info->setTrackNumber($info_data['track_number']);
+//            $file_info->setArtist($info_data['artist']);
+//            $file_info->setAlbum($info_data['album']);
+//            $file_info->setTitle($info_data['title']);
+//            $this->em->persist($file_info);
+//            $library_file->setInfo($file_info);
+//        }
 
         $this->em->persist($library_file);
     }
@@ -76,13 +76,13 @@ class LibraryService {
             $lf = $repository->findOneBy(array('md5' => $md5));
 
             if ($lf) {
-                $file_info = $lf->getInfo();
+                $track_info = $lf->getTrack();
             } else {
-                $file_info = new FileInfo();
+                $track_info = new Track();
                 $lf = new LibraryFile();
             }
 
-            $this->setLibraryFile($lf, $file_info, $user, $file, $info_data, $md5);
+            $this->setLibraryFile($lf, $track_info, $user, $file, $info_data, $md5);
             $counter++;
         }
 
