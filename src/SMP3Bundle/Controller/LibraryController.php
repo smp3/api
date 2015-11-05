@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\MimeType\FileBinaryMimeTypeGuesser;
 use SMP3Bundle\Entity\LibraryFile;
-use SMP3Bundle\Entity\FileInfo;
 use SMP3Bundle\Controller\APIBaseController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
