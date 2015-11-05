@@ -6,6 +6,8 @@ use Symfony\Component\Finder\Finder;
 use SMP3Bundle\Entity\User;
 use SMP3Bundle\Entity\LibraryFile;
 use SMP3Bundle\Entity\Track;
+use SMP3Bundle\Entity\Album;
+use SMP3Bundle\Entity\Artist;
 
 class LibraryService {
 
@@ -17,20 +19,64 @@ class LibraryService {
         $this->em = $this->container->get('doctrine')->getManager();
     }
 
-    protected function setLibraryFile(LibraryFile $library_file, $track_info, User $user, $file, $info_data, $md5) {
+    protected function setLibraryFile(LibraryFile $library_file, User $user, $file, $info_data, $md5) {
 
         $library_file->setFileName($file->getRelativePathname());
         $library_file->setMD5($md5);
         $library_file->setUser($user);
+        $artist_repo = $this->em->getRepository('SMP3Bundle:Artist');
+        $album_repo = $this->em->getRepository('SMP3Bundle:Album');
 
-//        if ($info_data) {
-//            $file_info->setTrackNumber($info_data['track_number']);
-//            $file_info->setArtist($info_data['artist']);
-//            $file_info->setAlbum($info_data['album']);
-//            $file_info->setTitle($info_data['title']);
-//            $this->em->persist($file_info);
-//            $library_file->setInfo($file_info);
-//        }
+
+        $track = $library_file->getTrack(); 
+        if (!$track) {
+             $track = new Track();
+        }
+
+        if ($info_data) {
+
+            $artist = $artist_repo->findOneByName($info_data['artist']);
+            if (!$artist) {
+                $artist = new Artist();
+            }
+
+            $album = $album_repo->findOneByTitle($info_data['album']);
+
+            if (!$album) {
+                $album = new Album();
+            }
+
+
+           
+
+            $artist->setName($info_data['artist']);
+            $album->setTitle($info_data['album']);
+
+            $track->setNN('title', $info_data['title']);
+            $track->setNN('number', $info_data['track_number']);
+
+
+
+            if ($artist->getName()) {
+                $this->em->persist($artist);
+                $this->em->flush();
+                $album->setArtist($artist);
+            }
+
+            if ($album->getTitle()) {
+                $this->em->persist($album);
+                $this->em->flush();
+                $track->setAlbum($album);
+                $library_file->setAlbum($album);
+            }
+
+            if ($track->getTitle()) {
+                $this->em->persist($track);
+                $library_file->setTrack($track);
+                $library_file->setArtist($artist);
+            }
+            
+        }
 
         $this->em->persist($library_file);
     }
@@ -75,14 +121,13 @@ class LibraryService {
 
             $lf = $repository->findOneBy(array('md5' => $md5));
 
-            if ($lf) {
-                $track_info = $lf->getTrack();
-            } else {
-                $track_info = new Track();
+            if (!$lf) {
                 $lf = new LibraryFile();
             }
 
-            $this->setLibraryFile($lf, $track_info, $user, $file, $info_data, $md5);
+
+
+            $this->setLibraryFile($lf, $user, $file, $info_data, $md5);
             $counter++;
         }
 

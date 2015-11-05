@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track")
  */
 class Track {
-
+    use EntitySettings;
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

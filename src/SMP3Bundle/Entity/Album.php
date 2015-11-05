@@ -5,11 +5,11 @@ namespace SMP3Bundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SMP3Bundle\Entity\AlbumRepository")
  * @ORM\Table(name="album")
  */
 class Album {
-
+     use EntitySettings;
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

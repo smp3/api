@@ -22,12 +22,19 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
 
     protected $user;
     
-    public function getDirectoriesAction() {
-        ///TODO: return directory tree or directories
-    }
+ 
 
-    public function getFilesAction($directory) {
+    public function getArtistsAction() {
+        $repository = $this->em->getRepository('SMP3Bundle:Artist');
         
+        return $this->handleView($this->view($repository->findAllByUser($this->getUser())));
+    }
+    
+ 
+    public function getAlbumsAction() {
+        $repository = $this->em->getRepository('SMP3Bundle:Album');
+        
+        return $this->handleView($this->view($repository->findAllByUser($this->getUser())));
     }
 
     public function getAction() {

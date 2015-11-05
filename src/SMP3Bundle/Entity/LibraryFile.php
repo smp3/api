@@ -32,12 +32,23 @@ class LibraryFile {
      * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\Track", orphanRemoval=true) 
      */
     protected $track;
-    
+
     /**
      * @ORM\Column(type="string")
      */
     protected $md5;
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album")
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $album;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist")
+     * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $artist;
     public $track_title;
 
     public function getId() {
@@ -59,7 +70,15 @@ class LibraryFile {
     public function getMD5() {
         return $this->md5;
     }
-    
+
+    public function getAlbum() {
+        return $this->album;
+    }
+
+    public function getArtist() {
+        return $this->artist;
+    }
+
     public function setFileName($file_name) {
         $this->file_name = $file_name;
     }
@@ -75,17 +94,26 @@ class LibraryFile {
     public function setTrack($track) {
         $this->track = $track;
     }
-    
+
     public function getTrackTitle() {
-        if($this->info) {
-            return $this->info->getTitle();
-        } else {
-            return basename($this->file_name);
-        }
+        return basename($this->file_name);
+//        if($this->info) {
+//            return $this->info->getTitle();
+//        } else {
+//            return basename($this->file_name);
+//        }
     }
-    
+
     public function setMD5($md5) {
         $this->md5 = $md5;
+    }
+
+    public function setAlbum($album) {
+        $this->album = $album;
+    }
+
+    public function setArtist($artist) {
+        $this->artist = $artist;
     }
 
 }
