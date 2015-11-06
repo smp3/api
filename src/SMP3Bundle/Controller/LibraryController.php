@@ -34,13 +34,21 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         return $this->handleView($this->view($repository->findAllByUser($this->getUser())));
     }
 
-    public function getAlbumsAction() {
+    public function getAlbumsAction(Request $request) {
+        
+
+
+        $albums = $this->album_repository
+                ->findAllByUser($this->getUser(), $this->artist_repository->findByName($request->get('artist')));
+//$findby['artist'] = $this->artist_repository->findByName($request->get('artist'));
+
+
         $repository = $this->em->getRepository('SMP3Bundle:Album');
-        return $this->handleView($this->view($repository->findAllByUser($this->getUser())));
+        return $this->handleView($this->view($albums));
     }
 
     public function getTree() {
-       
+
         $artists = $this->artist_repository->findAllByUser($this->getUser());
 
         $albums = $this->album_repository->findAllByUser($this->getUser());
@@ -59,8 +67,8 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         if ($request->get('artist')) {
             $findby['artist'] = $this->artist_repository->findByName($request->get('artist'));
         }
-        
-        if($request->get('album')) {
+
+        if ($request->get('album')) {
             $findby['album'] = $this->album_repository->findByTitle($request->get('album'));
         }
 
