@@ -39,13 +39,13 @@ class LibraryFile {
     protected $md5;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album")
+     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album", cascade={"persist"})
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $album;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist")
+     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist", cascade={"persist"})
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $artist;

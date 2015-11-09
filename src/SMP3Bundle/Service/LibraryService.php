@@ -116,6 +116,7 @@ class LibraryService {
 
             $info_data = $info_service->getTagInfo($file);
 
+            //TODO: faster, maybe crc32
             $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
             $md5 = md5($contents);
             unset($contents);
