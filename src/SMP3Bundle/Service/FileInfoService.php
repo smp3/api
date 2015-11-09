@@ -35,7 +35,7 @@ class FileInfoService {
                     continue;
                 }
                 
-                if (is_array($comment) && count($comment) == 1) {
+                if (is_array($comment) && count($comment) > 0) {
                     $comments[$key] = $comment[0];
                 } else {
                     $comments[$key] = $comment;
