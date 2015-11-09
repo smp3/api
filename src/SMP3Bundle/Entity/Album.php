@@ -9,33 +9,33 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="album")
  */
 class Album {
-     use EntitySettings;
+
+    use EntitySettings;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string")
      */
     protected $title;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist")
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $artist;
-    
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -46,8 +46,7 @@ class Album {
      *
      * @return Album
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
 
         return $this;
@@ -58,8 +57,7 @@ class Album {
      *
      * @return string
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -70,8 +68,7 @@ class Album {
      *
      * @return Album
      */
-    public function setArtist(\SMP3Bundle\Entity\Artist $artist = null)
-    {
+    public function setArtist(\SMP3Bundle\Entity\Artist $artist = null) {
         $this->artist = $artist;
 
         return $this;
@@ -82,8 +79,12 @@ class Album {
      *
      * @return \SMP3Bundle\Entity\Artist
      */
-    public function getArtist()
-    {
+    public function getArtist() {
         return $this->artist;
     }
+
+    public function __toString() {
+        return $this->title;
+    }
+
 }

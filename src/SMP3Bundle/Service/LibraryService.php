@@ -22,7 +22,7 @@ class LibraryService {
     protected function setLibraryFile(LibraryFile $library_file, User $user, $file, $info_data, $md5) {
 
         $library_file->setFileName($file->getRelativePathname());
-        $library_file->setMD5($md5);
+        $library_file->setChecksum($md5);
         $library_file->setUser($user);
         $artist_repo = $this->em->getRepository('SMP3Bundle:Artist');
         $album_repo = $this->em->getRepository('SMP3Bundle:Album');
@@ -100,6 +100,8 @@ class LibraryService {
     }
 
     public function discover(User $user) {
+        $return = new \stdClass;
+        $stime =  microtime(true);
         $info_service = $this->container->get('FileInfoService');
         $finder = new Finder();
         $finder->files()->in($user->getPath());
@@ -110,6 +112,7 @@ class LibraryService {
 
         $counter = 0;
         foreach ($finder as $file) {
+            
             if (!in_array($file->getExtension(), $this->exts)) {
                 continue;
             }
@@ -117,10 +120,10 @@ class LibraryService {
             $info_data = $info_service->getTagInfo($file);
 
             //TODO: faster, maybe crc32
-            $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
-            $md5 = md5($contents);
-            unset($contents);
-            $lf = $repository->findOneBy(array('md5' => $md5));
+            //$contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
+            $md5 = $counter.""; //crc32($contents);
+           
+            $lf = null; //$repository->findOneBy(array('checksum' => $md5));
 
             if (!$lf) {
                 $lf = new LibraryFile();
@@ -133,8 +136,10 @@ class LibraryService {
         }
 
         $em->flush();
-
-        return $counter;
+        $etime =  microtime(true);
+        $return->time = $etime - $stime;
+        $return->counter = $counter;
+        return $return;
     }
 
     public function clear() {

@@ -35,7 +35,8 @@ class DiscoverCommand extends ContainerAwareCommand {
         }
 
         foreach($users as $user) {
-            $library->discover($user);
+            $return = $library->discover($user);
+            $this->output->writeln("{$return->counter} files discovered in {$return->time} \n");
         }
 
     }

@@ -36,7 +36,7 @@ class LibraryFile {
     /**
      * @ORM\Column(type="string")
      */
-    protected $md5;
+    protected $checksum;
 
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album", cascade={"persist"})
@@ -67,8 +67,8 @@ class LibraryFile {
         return $this->track;
     }
 
-    public function getMD5() {
-        return $this->md5;
+    public function getChecksum() {
+        return $this->checksum;
     }
 
     public function getAlbum() {
@@ -104,8 +104,8 @@ class LibraryFile {
 //        }
     }
 
-    public function setMD5($md5) {
-        $this->md5 = $md5;
+    public function setChecksum($checksum) {
+        $this->checksum = $checksum;
     }
 
     public function setAlbum($album) {
