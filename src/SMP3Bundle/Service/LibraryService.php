@@ -118,7 +118,7 @@ class LibraryService {
 
             $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
             $md5 = md5($contents);
-
+            unset($contents);
             $lf = $repository->findOneBy(array('md5' => $md5));
 
             if (!$lf) {
