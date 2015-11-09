@@ -136,14 +136,28 @@ class LibraryService {
         return $counter;
     }
 
-    public function clear(User $user) {
+    public function clear() {
         $em = $this->container->get('doctrine')->getManager();
         $repository = $em->getRepository('SMP3Bundle:LibraryFile');
-        $all = $repository->findByUser($user);
+        $artist_repository = $em->getRepository('SMP3Bundle:Artist');
+        $album_repository = $em->getRepository('SMP3Bundle:Album');
+        
+        $all = $repository->findAll();
+        $all_artists = $artist_repository->findAll();
+        $all_albums = $album_repository->findAll();
+        
         foreach ($all as $file) {
             $em->remove($file);
         }
-
+        
+        foreach($all_albums as $album) {
+            $em->remove($album);
+        }
+        
+        foreach($all_artists as $artist) {
+            $em->remove($artist);
+        }
+        
         $em->flush();
     }
 
