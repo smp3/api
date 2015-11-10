@@ -26,6 +26,7 @@ class DiscoverCommand extends ContainerAwareCommand {
         $em = $this->getContainer()->get('doctrine')->getManager();
         $users = [];
         $username = $input->getArgument('username');
+        
         if ($username) {
             $output->writeln("Discovering files for $username");
             $users = $em->getRepository('SMP3Bundle:User')->findByUsername($username);
@@ -35,7 +36,7 @@ class DiscoverCommand extends ContainerAwareCommand {
         }
 
         foreach($users as $user) {
-            $return = $library->discover($user);
+            $return = $library->discover($user, true);
             $this->output->writeln("{$return->counter} files discovered in {$return->time} \n");
         }
 

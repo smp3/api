@@ -46,9 +46,6 @@ class LibraryService {
                 $album = new Album();
             }
 
-
-           
-
             $artist->setName($info_data['artist']);
             $album->setTitle($info_data['album']);
 
@@ -99,7 +96,7 @@ class LibraryService {
         return $counter;
     }
 
-    public function discover(User $user) {
+    public function discover(User $user, $skip_found = false) {
         $return = new \stdClass;
         $stime =  microtime(true);
         $info_service = $this->container->get('FileInfoService');
@@ -130,6 +127,9 @@ class LibraryService {
                 $info_data = $info_service->getTagInfo($file); 
             } else {
                 $info_data = null;
+                if($skip) {
+                    continue;
+                }
             }
 
             
