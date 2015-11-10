@@ -141,9 +141,6 @@ class LibraryService {
                 $info_data = $info_service->getTagInfo($file);
             } else {
                 $info_data = null;
-                if ($this->debug) {
-                    continue;
-                }
             }
 
 
