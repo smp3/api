@@ -116,22 +116,25 @@ class LibraryService {
             if (!in_array($file->getExtension(), $this->exts)) {
                 continue;
             }
-
-            $info_data = $info_service->getTagInfo($file);
-
-            //TODO: faster, maybe crc32
-            //$contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
-            $md5 = $counter.""; //crc32($contents);
+ 
+            $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
+            $checksum = crc32($contents);
            
-            $lf = null; //$repository->findOneBy(array('checksum' => $md5));
+            $lf = $repository->findOneBy(array('checksum' => $checksum));
 
             if (!$lf) {
                 $lf = new LibraryFile();
+                /*
+                 * Checksum is the same so the info data is the same
+                 */
+                $info_data = $info_service->getTagInfo($file); 
+            } else {
+                $info_data = null;
             }
 
+            
 
-
-            $this->setLibraryFile($lf, $user, $file, $info_data, $md5);
+            $this->setLibraryFile($lf, $user, $file, $info_data, $checksum);
             $counter++;
         }
 

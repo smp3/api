@@ -11,6 +11,9 @@ class FileInfoService {
 
     public function __construct() {
         $this->tag_info = new \getID3;
+        $this->tag_info->option_tags_html = false;
+        $this->tag_info->option_tag_lyrics3 = false;
+        $this->tag_info->option_extra_info = false;
     }
 
     public function addTrackTitles(&$files) {
@@ -21,9 +24,11 @@ class FileInfoService {
     }
     
     public function getTagInfo($file_path) {
+        
         $info = $this->tag_info->analyze($file_path);
+        
         \getid3_lib::CopyTagsToComments($info);
-
+        
         $comments = [];
 
         if (array_key_exists('comments', $info)) {
