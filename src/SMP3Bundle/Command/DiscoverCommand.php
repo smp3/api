@@ -17,6 +17,7 @@ class DiscoverCommand extends ContainerAwareCommand {
                 ->setName('smp3:discover')
                 ->setDescription('Discover audio files')
                 ->addArgument('username', InputArgument::OPTIONAL, 'Owner username')
+                ->addArgument('debug', InputArgument::OPTIONAL, 'Debug mode')
         ;
     }
 
@@ -36,7 +37,10 @@ class DiscoverCommand extends ContainerAwareCommand {
         }
 
         foreach($users as $user) {
-            $return = $library->discover($user, true);
+            if($input->getArgument('debug')) {
+                $library->setDebug(true);
+            }
+            $return = $library->discover($user);
             $this->output->writeln("{$return->counter} files discovered in {$return->time} \n");
         }
 

@@ -11,12 +11,19 @@ use SMP3Bundle\Entity\Artist;
 
 class LibraryService {
 
-    protected $container;
-    protected $exts = ['mp3', 'mp4', 'ogg', 'm4a'];
+    protected $container,
+            $exts = ['mp3', 'mp4', 'ogg', 'm4a'],
+            $debug = false
+
+    ;
 
     public function __construct($container) {
         $this->container = $container;
         $this->em = $this->container->get('doctrine')->getManager();
+    }
+
+    public function setDebug($debug) {
+        $this->debug = $debug;
     }
 
     protected function setLibraryFile(LibraryFile $library_file, User $user, $file, $info_data, $md5) {
@@ -28,9 +35,9 @@ class LibraryService {
         $album_repo = $this->em->getRepository('SMP3Bundle:Album');
 
 
-        $track = $library_file->getTrack(); 
+        $track = $library_file->getTrack();
         if (!$track) {
-             $track = new Track();
+            $track = new Track();
         }
 
         if ($info_data) {
@@ -72,7 +79,6 @@ class LibraryService {
                 $library_file->setTrack($track);
                 $library_file->setArtist($artist);
             }
-            
         }
 
         $this->em->persist($library_file);
@@ -96,9 +102,15 @@ class LibraryService {
         return $counter;
     }
 
-    public function discover(User $user, $skip_found = false) {
+    protected function debug_msg($msg) {
+        if ($this->debug) {
+            echo $msg . "\n";
+        }
+    }
+
+    public function discover(User $user) {
         $return = new \stdClass;
-        $stime =  microtime(true);
+        $stime = microtime(true);
         $info_service = $this->container->get('FileInfoService');
         $finder = new Finder();
         $finder->files()->in($user->getPath());
@@ -109,14 +121,14 @@ class LibraryService {
 
         $counter = 0;
         foreach ($finder as $file) {
-            
+            $this->debug_msg("Processing: " . $user->getPath() . '/' . $file->getRelativePathname());
             if (!in_array($file->getExtension(), $this->exts)) {
                 continue;
             }
- 
+
             $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
             $checksum = crc32($contents);
-           
+
             $lf = $repository->findOneBy(array('checksum' => $checksum));
 
             if (!$lf) {
@@ -124,22 +136,22 @@ class LibraryService {
                 /*
                  * Checksum is the same so the info data is the same
                  */
-                $info_data = $info_service->getTagInfo($file); 
+                $info_data = $info_service->getTagInfo($file);
             } else {
                 $info_data = null;
-                if($skip) {
+                if ($this->debug) {
                     continue;
                 }
             }
 
-            
+
 
             $this->setLibraryFile($lf, $user, $file, $info_data, $checksum);
             $counter++;
         }
 
         $em->flush();
-        $etime =  microtime(true);
+        $etime = microtime(true);
         $return->time = $etime - $stime;
         $return->counter = $counter;
         return $return;
@@ -150,23 +162,23 @@ class LibraryService {
         $repository = $em->getRepository('SMP3Bundle:LibraryFile');
         $artist_repository = $em->getRepository('SMP3Bundle:Artist');
         $album_repository = $em->getRepository('SMP3Bundle:Album');
-        
+
         $all = $repository->findAll();
         $all_artists = $artist_repository->findAll();
         $all_albums = $album_repository->findAll();
-        
+
         foreach ($all as $file) {
             $em->remove($file);
         }
-        
-        foreach($all_albums as $album) {
+
+        foreach ($all_albums as $album) {
             $em->remove($album);
         }
-        
-        foreach($all_artists as $artist) {
+
+        foreach ($all_artists as $artist) {
             $em->remove($artist);
         }
-        
+
         $em->flush();
     }
 
