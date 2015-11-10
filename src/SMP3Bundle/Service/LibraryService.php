@@ -77,7 +77,9 @@ class LibraryService {
             if ($track->getTitle()) {
                 $this->em->persist($track);
                 $library_file->setTrack($track);
-                $library_file->setArtist($artist);
+                if ($artist->getName()) {
+                    $library_file->setArtist($artist);
+                }
             }
         }
 
