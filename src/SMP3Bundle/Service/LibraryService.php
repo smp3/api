@@ -14,7 +14,6 @@ class LibraryService
     protected $container,
             $exts = ['mp3', 'mp4', 'ogg', 'm4a'],
             $debug = false
-
     ;
 
     public function __construct($container)

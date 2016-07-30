@@ -1,3 +1,4 @@
+#TODO: don't pass container to services
 services:
     smp3.fileinfo:
         class: SMP3Bundle\Service\FileInfoService
@@ -5,4 +6,8 @@ services:
     smp3.library:
         class: SMP3Bundle\Service\LibraryService
         arguments: ['@service_container']
-    
+    smp3.config:
+        class: SMP3Bundle\Service\ConfigService
+        arguments:
+            - %discoverable_exts%
+        
