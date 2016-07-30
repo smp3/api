@@ -75,11 +75,7 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
     }
 
     public function getDiscoverAction()
-    {
-        //$library_service = $this->get('smp3.library');
-
-        //$counter = $library_service->discover($this->getUser());
-        
+    {   
         
         $msg = [
          'user_id'=>$this->getUser()->getId(),   
