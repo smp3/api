@@ -8,26 +8,26 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="SMP3Bundle\Entity\ArtistRepository")
  * @ORM\Table(name="artist")
  */
-class Artist {
-     use EntitySettings;
-    
+class Artist
+{
+    use EntitySettings;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string")
      */
     protected $name;
-    
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -35,7 +35,7 @@ class Artist {
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -49,7 +49,7 @@ class Artist {
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -57,9 +57,9 @@ class Artist {
     {
         return $this->name;
     }
-    
-    public function __toString() {
+
+    public function __toString()
+    {
         return $this->name;
     }
-
 }

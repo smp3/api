@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="track")
  */
-class Track {
+class Track
+{
     use EntitySettings;
     /**
      * @ORM\Id
@@ -16,28 +17,27 @@ class Track {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string")
      */
     protected $title;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=true, options={"unsigned": true, "default": 0})
      */
     protected $number;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album")
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $album;
-    
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -45,7 +45,7 @@ class Track {
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -59,7 +59,7 @@ class Track {
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -69,9 +69,9 @@ class Track {
     }
 
     /**
-     * Set number
+     * Set number.
      *
-     * @param integer $number
+     * @param int $number
      *
      * @return Track
      */
@@ -83,9 +83,9 @@ class Track {
     }
 
     /**
-     * Get number
+     * Get number.
      *
-     * @return integer
+     * @return int
      */
     public function getNumber()
     {
@@ -93,7 +93,7 @@ class Track {
     }
 
     /**
-     * Set album
+     * Set album.
      *
      * @param \SMP3Bundle\Entity\Album $album
      *
@@ -107,7 +107,7 @@ class Track {
     }
 
     /**
-     * Get album
+     * Get album.
      *
      * @return \SMP3Bundle\Entity\Album
      */

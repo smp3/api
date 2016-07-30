@@ -9,31 +9,32 @@ use SMP3Bundle\Entity\Track;
 use SMP3Bundle\Entity\Album;
 use SMP3Bundle\Entity\Artist;
 
-class LibraryService {
-
+class LibraryService
+{
     protected $container,
             $exts = ['mp3', 'mp4', 'ogg', 'm4a'],
             $debug = false
 
     ;
 
-    public function __construct($container) {
+    public function __construct($container)
+    {
         $this->container = $container;
         $this->em = $this->container->get('doctrine')->getManager();
     }
 
-    public function setDebug($debug) {
+    public function setDebug($debug)
+    {
         $this->debug = $debug;
     }
 
-    protected function setLibraryFile(LibraryFile $library_file, User $user, $file, $info_data, $md5) {
-
+    protected function setLibraryFile(LibraryFile $library_file, User $user, $file, $info_data, $md5)
+    {
         $library_file->setFileName($file->getRelativePathname());
         $library_file->setChecksum($md5);
         $library_file->setUser($user);
         $artist_repo = $this->em->getRepository('SMP3Bundle:Artist');
         $album_repo = $this->em->getRepository('SMP3Bundle:Album');
-
 
         $track = $library_file->getTrack();
         if (!$track) {
@@ -41,7 +42,6 @@ class LibraryService {
         }
 
         if ($info_data) {
-
             $artist = $artist_repo->findOneByName($info_data['artist']);
             if (!$artist) {
                 $artist = new Artist();
@@ -58,8 +58,6 @@ class LibraryService {
 
             $track->setNN('title', $info_data['title']);
             $track->setNN('number', $info_data['track_number']);
-
-
 
             if ($artist->getName()) {
                 $this->em->persist($artist);
@@ -86,16 +84,17 @@ class LibraryService {
         $this->em->persist($library_file);
     }
 
-    protected function removeOrphaned($user) {
+    protected function removeOrphaned($user)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $repository = $em->getRepository('SMP3Bundle:LibraryFile');
         $all = $repository->findByUser($user);
         $counter = 0;
 
         foreach ($all as $file) {
-            if (!file_exists($user->getPath() . '/' . $file->getFileName())) {
+            if (!file_exists($user->getPath().'/'.$file->getFileName())) {
                 $em->remove($file);
-                $counter++;
+                ++$counter;
             }
         }
 
@@ -104,14 +103,16 @@ class LibraryService {
         return $counter;
     }
 
-    protected function debug_msg($msg) {
+    protected function debug_msg($msg)
+    {
         if ($this->debug) {
-            echo $msg . "\n";
+            echo $msg."\n";
         }
     }
 
-    public function discover(User $user) {
-        $return = new \stdClass;
+    public function discover(User $user)
+    {
+        $return = new \stdClass();
         $stime = microtime(true);
         $info_service = $this->container->get('FileInfoService');
         $finder = new Finder();
@@ -123,12 +124,12 @@ class LibraryService {
 
         $counter = 0;
         foreach ($finder as $file) {
-            $this->debug_msg("Processing: " . $user->getPath() . '/' . $file->getRelativePathname());
+            $this->debug_msg('Processing: '.$user->getPath().'/'.$file->getRelativePathname());
             if (!in_array($file->getExtension(), $this->exts)) {
                 continue;
             }
 
-            $contents = file_get_contents($user->getPath() . '/' . $file->getRelativePathname());
+            $contents = file_get_contents($user->getPath().'/'.$file->getRelativePathname());
             $checksum = crc32($contents);
 
             $lf = $repository->findOneBy(array('checksum' => $checksum));
@@ -143,20 +144,20 @@ class LibraryService {
                 $info_data = null;
             }
 
-
-
             $this->setLibraryFile($lf, $user, $file, $info_data, $checksum);
-            $counter++;
+            ++$counter;
         }
 
         $em->flush();
         $etime = microtime(true);
         $return->time = $etime - $stime;
         $return->counter = $counter;
+
         return $return;
     }
 
-    public function clear() {
+    public function clear()
+    {
         $em = $this->container->get('doctrine')->getManager();
         $repository = $em->getRepository('SMP3Bundle:LibraryFile');
         $artist_repository = $em->getRepository('SMP3Bundle:Artist');
@@ -180,5 +181,4 @@ class LibraryService {
 
         $em->flush();
     }
-
 }

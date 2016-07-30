@@ -4,10 +4,11 @@ namespace SMP3Bundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 
-class UserType extends AbstractType {
-
-     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-         $builder
+class UserType extends AbstractType
+{
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    {
+        $builder
                 ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
                 ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
                 ->add('plainPassword', 'repeated', array(
@@ -18,11 +19,10 @@ class UserType extends AbstractType {
                     'invalid_message' => 'fos_user.password.mismatch',
                 ))
             ;
-               
-    }
-    
-    public function getName() {
-        return 'fos_user_rest_registration';
     }
 
+    public function getName()
+    {
+        return 'fos_user_rest_registration';
+    }
 }

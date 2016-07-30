@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="library_file")
  */
-class LibraryFile {
-
+class LibraryFile
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -51,51 +51,63 @@ class LibraryFile {
     protected $artist;
     public $track_title;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getFileName() {
+    public function getFileName()
+    {
         return $this->file_name;
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
-    public function getTrack() {
+    public function getTrack()
+    {
         return $this->track;
     }
 
-    public function getChecksum() {
+    public function getChecksum()
+    {
         return $this->checksum;
     }
 
-    public function getAlbum() {
+    public function getAlbum()
+    {
         return $this->album;
     }
 
-    public function getArtist() {
+    public function getArtist()
+    {
         return $this->artist;
     }
 
-    public function setFileName($file_name) {
+    public function setFileName($file_name)
+    {
         $this->file_name = $file_name;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    function setUser($user) {
+    public function setUser($user)
+    {
         $this->user = $user;
     }
 
-    public function setTrack($track) {
+    public function setTrack($track)
+    {
         $this->track = $track;
     }
 
-    public function getTrackTitle() {
+    public function getTrackTitle()
+    {
         return basename($this->file_name);
 //        if($this->info) {
 //            return $this->info->getTitle();
@@ -104,16 +116,18 @@ class LibraryFile {
 //        }
     }
 
-    public function setChecksum($checksum) {
+    public function setChecksum($checksum)
+    {
         $this->checksum = $checksum;
     }
 
-    public function setAlbum($album) {
+    public function setAlbum($album)
+    {
         $this->album = $album;
     }
 
-    public function setArtist($artist) {
+    public function setArtist($artist)
+    {
         $this->artist = $artist;
     }
-
 }

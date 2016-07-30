@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="playlist")
  */
-class Playlist {
-
+class Playlist
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -34,71 +34,78 @@ class Playlist {
     protected $playlist_files;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \SMP3Bundle\Entity\User $user
      *
      * @return Playlist
      */
-    public function setUser(\SMP3Bundle\Entity\User $user = null) {
+    public function setUser(\SMP3Bundle\Entity\User $user = null)
+    {
         $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \SMP3Bundle\Entity\User
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
      * @return Playlist
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
-    public function setPlaylistFiles($files) {
+    public function setPlaylistFiles($files)
+    {
         $this->playlist_files = $files;
     }
 
-    public function addPlaylistFile($file) {
+    public function addPlaylistFile($file)
+    {
         if (!is_array($this->playlist_files)) {
             $this->playlist_files = [];
         }
         $this->playlist_files[] = $file;
     }
 
-    public function getPlaylistFiles() {
+    public function getPlaylistFiles()
+    {
         return $this->playlist_files;
     }
-
 }

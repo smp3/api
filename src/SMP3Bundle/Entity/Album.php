@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="SMP3Bundle\Entity\AlbumRepository")
  * @ORM\Table(name="album")
  */
-class Album {
-
+class Album
+{
     use EntitySettings;
 
     /**
@@ -31,60 +31,65 @@ class Album {
     protected $artist;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
      * @return Album
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
     /**
-     * Set artist
+     * Set artist.
      *
      * @param \SMP3Bundle\Entity\Artist $artist
      *
      * @return Album
      */
-    public function setArtist(\SMP3Bundle\Entity\Artist $artist = null) {
+    public function setArtist(\SMP3Bundle\Entity\Artist $artist = null)
+    {
         $this->artist = $artist;
 
         return $this;
     }
 
     /**
-     * Get artist
+     * Get artist.
      *
      * @return \SMP3Bundle\Entity\Artist
      */
-    public function getArtist() {
+    public function getArtist()
+    {
         return $this->artist;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->title;
     }
-
 }

@@ -3,31 +3,29 @@
 namespace SMP3Bundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use SMP3Bundle\Entity\User;
 use SMP3Bundle\Entity\PlaylistItem;
 
-class PlaylistType extends AbstractType {
+class PlaylistType extends AbstractType
+{
     protected $user;
-    
-    public function __construct(User $user) {
+
+    public function __construct(User $user)
+    {
         $this->user = $user;
     }
-    
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
+
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+    {
         $builder
                 ->add('title')
-                ->add('playlist_files','collection', ['type'=>new PlaylistItem(), 'required'=>false])
-               
+                ->add('playlist_files', 'collection', ['type' => new PlaylistItem(), 'required' => false])
+
                 ;
-               
     }
-    
-    
-    
-    public function getName() {
+
+    public function getName()
+    {
         return 'playlist';
     }
 }

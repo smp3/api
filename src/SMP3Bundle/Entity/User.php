@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
  */
-class User extends BaseUser 
+class User extends BaseUser
 {
     use EntitySettings;
     /**
@@ -23,18 +23,20 @@ class User extends BaseUser
      * @ORM\Column(type="string", nullable=True)
      */
     protected $path;
-    
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
     }
-    
-    public function getPath() {
+
+    public function getPath()
+    {
         return $this->path;
     }
-    
-    public function setPath($path) {
+
+    public function setPath($path)
+    {
         $this->path = $path;
     }
 }

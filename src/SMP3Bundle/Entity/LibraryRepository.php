@@ -3,11 +3,11 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use SMP3Bundle\Entity\User;
 
-class LibraryRepository extends EntityRepository {
-
-    public function genericFindAllByUser(User $user, $join_entity) {
+class LibraryRepository extends EntityRepository
+{
+    public function genericFindAllByUser(User $user, $join_entity)
+    {
         $query = $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select('a')
@@ -20,5 +20,4 @@ class LibraryRepository extends EntityRepository {
 
         return $query;
     }
-
 }

@@ -1,28 +1,28 @@
 <?php
 
 namespace SMP3Bundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="playlist_item")
  */
-
-class PlaylistItem {
-     /**
+class PlaylistItem
+{
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Playlist", inversedBy="playlist_files")
      * @ORM\JoinColumn(name="playlist_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $playlist;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\LibraryFile")
      * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="CASCADE")
@@ -30,9 +30,9 @@ class PlaylistItem {
     protected $file;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -40,7 +40,7 @@ class PlaylistItem {
     }
 
     /**
-     * Set playlist
+     * Set playlist.
      *
      * @param \SMP3Bundle\Entity\Playlist $playlist
      *
@@ -54,7 +54,7 @@ class PlaylistItem {
     }
 
     /**
-     * Get playlist
+     * Get playlist.
      *
      * @return \SMP3Bundle\Entity\Playlist
      */
@@ -64,7 +64,7 @@ class PlaylistItem {
     }
 
     /**
-     * Set file
+     * Set file.
      *
      * @param \SMP3Bundle\Entity\LibraryFile $file
      *
@@ -78,7 +78,7 @@ class PlaylistItem {
     }
 
     /**
-     * Get file
+     * Get file.
      *
      * @return \SMP3Bundle\Entity\LibraryFile
      */

@@ -5,21 +5,23 @@ namespace SMP3Bundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ClearCommand extends ContainerAwareCommand {
-     protected $output;
+class ClearCommand extends ContainerAwareCommand
+{
+    protected $output;
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
                 ->setName('smp3:clear')
                 ->setDescription('Remove library contents')
                 ->addArgument('username', InputArgument::OPTIONAL, 'Owner username')
         ;
     }
-    
-    protected function execute(InputInterface $input, OutputInterface $output) {
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $library = $this->getContainer()->get('LibraryService');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine')->getManager();
@@ -31,9 +33,8 @@ class ClearCommand extends ContainerAwareCommand {
             $users = $em->getRepository('SMP3Bundle:User')->findAll();
         }
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $library->clear($user);
         }
-
     }
 }
