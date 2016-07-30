@@ -13,4 +13,5 @@
 *.php~
 /web/js
 /nbproject/private/
-/composer.lock
+composer.lock
+/var
