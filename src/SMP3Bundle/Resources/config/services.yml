@@ -1,5 +1,5 @@
 services:
-    FileInfoService:
+    smp3.fileinfo:
         class: SMP3Bundle\Service\FileInfoService
         arguments: [] 
     smp3.library:

@@ -67,7 +67,7 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         }
 
         $files = $this->library_repository->findBy($findby);
-        $this->container->get('FileInfoService')->addTrackTitles($files);
+        $this->get('smp3.fileinfo')->addTrackTitles($files);
         $view = View::create();
         $view->setData($files);
 

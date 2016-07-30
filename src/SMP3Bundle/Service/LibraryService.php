@@ -114,7 +114,7 @@ class LibraryService
     {
         $return = new \stdClass();
         $stime = microtime(true);
-        $info_service = $this->container->get('FileInfoService');
+        $info_service = $this->container->get('smp3.fileinfo');
         $finder = new Finder();
         $finder->files()->in($user->getPath());
         $em = $this->container->get('doctrine')->getManager();

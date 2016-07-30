@@ -22,7 +22,7 @@ class ClearCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $library = $this->getContainer()->get('LibraryService');
+        $library = $this->getContainer()->get('smp3.library');
         $this->output = $output;
         $em = $this->getContainer()->get('doctrine')->getManager();
         $users = [];
