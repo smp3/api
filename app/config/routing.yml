@@ -2,6 +2,11 @@ fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
     
 
+default:
+    prefix: /
+    type:     annotation
+    resource: "@SMP3Bundle/Controller/DefaultController.php" 
+
 smp3:
     type: rest
     prefix:   /api
