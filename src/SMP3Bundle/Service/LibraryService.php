@@ -16,10 +16,12 @@ class LibraryService
             $debug = false
     ;
 
-    public function __construct($container)
+    public function __construct($em, $fileInfo, $configService)
     {
-        $this->container = $container;
-        $this->em = $this->container->get('doctrine')->getManager();
+        
+        $this->em = $em->getManager();
+        $this->fileInfo = $fileInfo;
+        $this->configService = $configService;
     }
 
     public function setDebug($debug)
@@ -85,19 +87,19 @@ class LibraryService
 
     protected function removeOrphaned($user)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
+        
+        $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
         $all = $repository->findByUser($user);
         $counter = 0;
 
         foreach ($all as $file) {
             if (!file_exists($user->getPath().'/'.$file->getFileName())) {
-                $em->remove($file);
+                $this->em->remove($file);
                 ++$counter;
             }
         }
 
-        $em->flush();
+        $this->em->flush();
 
         return $counter;
     }
@@ -113,18 +115,17 @@ class LibraryService
     {
         $return = new \stdClass();
         $stime = microtime(true);
-        $info_service = $this->container->get('smp3.fileinfo');
+        //$info_service = $this->container->get('smp3.fileinfo');
         $finder = new Finder();
         $finder->files()->in($user->getPath());
-        $em = $this->container->get('doctrine')->getManager();
-        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
+        $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
 
         $this->removeOrphaned($user);
 
         $counter = 0;
         foreach ($finder as $file) {
             $this->debug_msg('Processing: '.$user->getPath().'/'.$file->getRelativePathname());
-            if (!in_array($file->getExtension(), $this->exts)) {
+            if (!in_array($file->getExtension(), $this->configService->getDiscoverableExts())) {
                 continue;
             }
 
@@ -138,7 +139,7 @@ class LibraryService
                 /*
                  * Checksum is the same so the info data is the same
                  */
-                $info_data = $info_service->getTagInfo($file);
+                $info_data = $this->fileInfo->getTagInfo($file);
             } else {
                 $info_data = null;
             }
@@ -147,7 +148,7 @@ class LibraryService
             ++$counter;
         }
 
-        $em->flush();
+        $this->em->flush();
         $etime = microtime(true);
         $return->time = $etime - $stime;
         $return->counter = $counter;
@@ -157,27 +158,26 @@ class LibraryService
 
     public function clear()
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $repository = $em->getRepository('SMP3Bundle:LibraryFile');
-        $artist_repository = $em->getRepository('SMP3Bundle:Artist');
-        $album_repository = $em->getRepository('SMP3Bundle:Album');
+        $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
+        $artist_repository = $this->em->getRepository('SMP3Bundle:Artist');
+        $album_repository = $this->em->getRepository('SMP3Bundle:Album');
 
         $all = $repository->findAll();
         $all_artists = $artist_repository->findAll();
         $all_albums = $album_repository->findAll();
 
         foreach ($all as $file) {
-            $em->remove($file);
+            $this->em->remove($file);
         }
 
         foreach ($all_albums as $album) {
-            $em->remove($album);
+            $this->em->remove($album);
         }
 
         foreach ($all_artists as $artist) {
-            $em->remove($artist);
+            $this->em->remove($artist);
         }
 
-        $em->flush();
+        $this->em->flush();
     }
 }
