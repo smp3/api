@@ -30,14 +30,14 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/rest-bundle": "^1.7",
         "jms/serializer-bundle": "^1.0",
-        
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/finder": "*",
         "symfony/http-foundation": "*",
         "friendsofsymfony/jsrouting-bundle": "*",
         "lexik/jwt-authentication-bundle": "*",
         "nelmio/cors-bundle": "^1.4",
-        "james-heinrich/getid3": "^1.9.10"
+        "james-heinrich/getid3": "^1.9.10",
+        "php-amqplib/rabbitmq-bundle": "^1.9"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

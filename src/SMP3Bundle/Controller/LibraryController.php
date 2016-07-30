@@ -76,11 +76,17 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
 
     public function getDiscoverAction()
     {
-        $library_service = $this->get('smp3.library');
+        //$library_service = $this->get('smp3.library');
 
-        $counter = $library_service->discover($this->getUser());
-
-        return $this->handleView($this->view($counter, 200));
+        //$counter = $library_service->discover($this->getUser());
+        
+        
+        $msg = [
+         'user_id'=>$this->getUser()->getId(),   
+        ];
+        
+        $this->get('old_sound_rabbit_mq.discover_producer')->publish(json_encode($msg));
+        return $this->handleView($this->view(0, 200));
     }
 
     /**
