@@ -3,6 +3,7 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -31,8 +32,13 @@ class Playlist
     /**
      * @ORM\OneToMany(targetEntity="SMP3Bundle\Entity\PlaylistItem", mappedBy="playlist")
      */
-    protected $playlist_files;
+    protected $items;
 
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
+    
     /**
      * Get id.
      *
@@ -91,21 +97,18 @@ class Playlist
         return $this->title;
     }
 
-    public function setPlaylistFiles($files)
+    public function setItems($items)
     {
-        $this->playlist_files = $files;
+        $this->items = $items;
     }
 
-    public function addPlaylistFile($file)
+    public function addItem($item)
     {
-        if (!is_array($this->playlist_files)) {
-            $this->playlist_files = [];
-        }
-        $this->playlist_files[] = $file;
+        $this->items->add($item);
     }
 
-    public function getPlaylistFiles()
+    public function getItems()
     {
-        return $this->playlist_files;
+        return $this->items;
     }
 }

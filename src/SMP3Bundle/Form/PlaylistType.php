@@ -19,7 +19,7 @@ class PlaylistType extends AbstractType
     {
         $builder
                 ->add('title')
-                ->add('playlist_files', 'collection', ['type' => new PlaylistItem(), 'required' => false])
+                ->add('items', 'collection', ['type' => new PlaylistItem(), 'required' => false])
 
                 ;
     }

@@ -13,8 +13,16 @@ services:
         arguments:
             - %discoverable_exts%
     
+    smp3.playlist:
+        class: SMP3Bundle\Service\PlaylistService
+        arguments:
+            - '@doctrine'
+            - '@security.token_storage'
+    
     smp3.discover:
         class: SMP3Bundle\Service\Consumer\Discover
         arguments: 
             - '@doctrine'
             - '@smp3.library'
+    
+    

@@ -18,7 +18,7 @@ class PlaylistItem
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Playlist", inversedBy="playlist_files")
+     * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Playlist", inversedBy="items")
      * @ORM\JoinColumn(name="playlist_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $playlist;
