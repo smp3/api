@@ -32,7 +32,7 @@ class PlaylistService
          * Disgrepancy: POST has playlist_files, PUT has items
          */
         
-        foreach ($data->playlist->playlist_files as $item) {
+        foreach ($data->playlist->items as $item) {
             $playlist_item = new PlaylistItem();
             $item = $item->file;
             $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->id]);
