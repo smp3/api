@@ -41,7 +41,9 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "doctrine/doctrine-fixtures-bundle": "*",
+        "fzaninotto/faker": "*"
     },
     "scripts": {
         "post-install-cmd": [

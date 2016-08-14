@@ -56,6 +56,7 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
 
     public function getAction(Request $request)
     {
+        /// $context = new SerializationContext();
         $findby = ['user' => $this->getUser()];
 
         if ($request->get('artist')) {
