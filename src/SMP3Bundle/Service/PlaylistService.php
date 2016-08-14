@@ -4,6 +4,7 @@ namespace SMP3Bundle\Service;
 
 use SMP3Bundle\Entity\Playlist;
 use SMP3Bundle\Entity\PlaylistItem;
+Use SMP3Bundle\Entity\User;
 
 class PlaylistService
 {
@@ -26,6 +27,11 @@ class PlaylistService
         //
     }
 
+    public function create($data)
+    {
+        // TODO
+    }
+    
     public function saveItems(Playlist $playlist, $data)
     {
         /*
