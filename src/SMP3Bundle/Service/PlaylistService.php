@@ -29,18 +29,17 @@ class PlaylistService
 
     public function create($data)
     {
-        // TODO
+        $playlist = new Playlist();
+        $this->savePlaylist($playlist, $data);
+        $this->saveItems($playlist, $data);
+        return $playlist;
     }
-    
+
     public function saveItems(Playlist $playlist, $data)
     {
-        /*
-         * Disgrepancy: POST has playlist_files, PUT has items
-         */
-        
+
         foreach ($data->playlist->items as $item) {
             $playlist_item = new PlaylistItem();
-            //$item = $item->file;
             $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item]);
             $playlist_item->setFile($file);
             $playlist_item->setPlaylist($playlist);
@@ -56,7 +55,7 @@ class PlaylistService
         foreach ($playlist->getItems() as $file) {
             $this->em->remove($file);
         }
-        
+
         $this->saveItems($playlist, $data);
     }
 

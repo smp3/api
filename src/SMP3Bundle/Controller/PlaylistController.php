@@ -16,12 +16,13 @@ use JMS\Serializer\SerializationContext;
 class PlaylistController extends APIBaseController implements ClassResourceInterface
 {
 
-    protected function view($data = null, $statusCode = null, array $headers = array()) {
+    protected function view($data = null, $statusCode = null, array $headers = array())
+    {
         $view = parent::view($data, $statusCode, $headers);
         $view->setSerializationContext(SerializationContext::create()->setGroups(['playlist']));
         return $view;
     }
-    
+
     public function getPlaylistsAction()
     {
         $playlists = $this->em->getRepository('SMP3Bundle:Playlist')->findBy(['user' => $this->getUser()]);
@@ -36,23 +37,20 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         return $this->handleView($this->view($playlist, 200));
     }
 
-    
     /**
-     * {"playlist": {"title": "test pl", "items":[1, 2, 3]}}
+     * {"playlist": {"title": "test playlist", "items":[1, 2, 3]}}
      */
     public function postPlaylistAction(Request $request)
     {
         $data = json_decode($request->getContent());
 
         $playlistService = $this->get('smp3.playlist');
-        
+
         $playlistService->validate($data);
-        $playlist = new Playlist();
-        $playlistService->savePlaylist($playlist, $data);
-        $playlistService->saveItems($playlist, $data);
         
+        $playlist = $playlistService->create($data);
         $this->em->flush();
-        
+
         return $this->handleView($this->view($playlist, 200));
     }
 
@@ -60,13 +58,13 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
     {
         $data = json_decode($request->getContent());
         $playlistService = $this->get('smp3.playlist');
-        
+
         $playlistService->validate($data);
         $playlistService->savePlaylist($playlist, $data);
-        $playlistService->updateItems($playlist, $data);    
-        
+        $playlistService->updateItems($playlist, $data);
+
         $this->em->flush();
-        
+
         return $this->handleView($this->view($playlist, 200));
     }
 
@@ -74,10 +72,10 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
     {
 
         $removedId = $playlist->getId();
-        
+
         $this->get('smp3.playlist')->delete($playlist);
         $this->em->flush();
-        
-        return $this->handleView($this->view(['removed_id'=>$removedId], 200));
+
+        return $this->handleView($this->view(['removed_id' => $removedId], 200));
     }
 }
