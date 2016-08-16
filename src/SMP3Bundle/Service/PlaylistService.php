@@ -40,8 +40,8 @@ class PlaylistService
         
         foreach ($data->playlist->items as $item) {
             $playlist_item = new PlaylistItem();
-            $item = $item->file;
-            $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item->id]);
+            //$item = $item->file;
+            $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(['id' => $item]);
             $playlist_item->setFile($file);
             $playlist_item->setPlaylist($playlist);
             $this->em->persist($playlist_item);

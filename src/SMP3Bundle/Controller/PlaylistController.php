@@ -36,10 +36,14 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         return $this->handleView($this->view($playlist, 200));
     }
 
+    
+    /**
+     * {"playlist": {"title": "test pl", "items":[1, 2, 3]}}
+     */
     public function postPlaylistAction(Request $request)
     {
         $data = json_decode($request->getContent());
-        
+
         $playlistService = $this->get('smp3.playlist');
         
         $playlistService->validate($data);
@@ -49,7 +53,7 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         
         $this->em->flush();
         
-        return $this->handleView($this->view('OK', 200));
+        return $this->handleView($this->view($playlist, 200));
     }
 
     public function putPlaylistAction(Request $request, Playlist $playlist)
@@ -63,15 +67,17 @@ class PlaylistController extends APIBaseController implements ClassResourceInter
         
         $this->em->flush();
         
-        return $this->handleView($this->view('PUT TODO', 200));
+        return $this->handleView($this->view($playlist, 200));
     }
 
     public function deletePlaylistAction(Playlist $playlist)
     {
 
+        $removedId = $playlist->getId();
+        
         $this->get('smp3.playlist')->delete($playlist);
         $this->em->flush();
-
-        return $this->handleView($this->view('OK', 200));
+        
+        return $this->handleView($this->view(['removed_id'=>$removedId], 200));
     }
 }
