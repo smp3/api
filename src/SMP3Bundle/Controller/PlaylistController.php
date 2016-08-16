@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\View\View;
 use SMP3Bundle\Entity\Playlist;
 use SMP3Bundle\Entity\PlaylistItem;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @RouteResource("")
@@ -15,6 +16,12 @@ use SMP3Bundle\Entity\PlaylistItem;
 class PlaylistController extends APIBaseController implements ClassResourceInterface
 {
 
+    protected function view($data = null, $statusCode = null, array $headers = array()) {
+        $view = parent::view($data, $statusCode, $headers);
+        $view->setSerializationContext(SerializationContext::create()->setGroups(['playlist']));
+        return $view;
+    }
+    
     public function getPlaylistsAction()
     {
         $playlists = $this->em->getRepository('SMP3Bundle:Playlist')->findBy(['user' => $this->getUser()]);

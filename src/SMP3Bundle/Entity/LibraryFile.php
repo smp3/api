@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Accessor;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @ORM\Entity(repositoryClass="SMP3Bundle\Entity\LibraryFileRespository")
@@ -21,13 +22,13 @@ class LibraryFile
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
-     *  @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $file_name;
 
@@ -39,7 +40,7 @@ class LibraryFile
     
     /**
      * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\Track", orphanRemoval=true) 
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $track;
 
@@ -51,20 +52,20 @@ class LibraryFile
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album", cascade={"persist"})
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE")
-     *  @Groups("library")
+     *  @Groups({"library", "playlist"})
      */
     protected $album;
 
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist", cascade={"persist"})
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $artist;
     
      /** 
       * @Accessor(getter="getTitle") 
-      * @Groups("library")
+      * @Groups({"library", "playlist"})
       */
     protected $title;
 

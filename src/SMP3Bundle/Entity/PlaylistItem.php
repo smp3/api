@@ -3,6 +3,7 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -14,6 +15,7 @@ class PlaylistItem
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"playlist"})
      */
     protected $id;
 
@@ -26,6 +28,7 @@ class PlaylistItem
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\LibraryFile")
      * @ORM\JoinColumn(name="file_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"playlist"})
      */
     protected $file;
 

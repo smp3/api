@@ -4,6 +4,7 @@ namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -15,6 +16,7 @@ class Playlist
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"playlist"})
      */
     protected $id;
 
@@ -26,11 +28,13 @@ class Playlist
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"playlist"})
      */
     protected $title;
 
     /**
      * @ORM\OneToMany(targetEntity="SMP3Bundle\Entity\PlaylistItem", mappedBy="playlist")
+     * @Groups({"playlist"})
      */
     protected $items;
 

@@ -17,13 +17,13 @@ class Artist
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $name;
 

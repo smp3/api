@@ -17,19 +17,19 @@ class Track
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $title;
 
     /**
      * @ORM\Column(type="integer", nullable=true, options={"unsigned": true, "default": 0})
-     * @Groups("library")
+     * @Groups({"library", "playlist"})
      */
     protected $number;
 
