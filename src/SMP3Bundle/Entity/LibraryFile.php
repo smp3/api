@@ -36,7 +36,7 @@ class LibraryFile
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
-
+    
     /**
      * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\Track", orphanRemoval=true) 
      * @Groups("library")
@@ -58,10 +58,15 @@ class LibraryFile
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist", cascade={"persist"})
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
-     *  @Groups("library")
+     * @Groups("library")
      */
     protected $artist;
-    public $track_title;
+    
+     /** 
+      * @Accessor(getter="getTitle") 
+      * @Groups("library")
+      */
+    protected $title;
 
     public function getId()
     {
@@ -118,14 +123,14 @@ class LibraryFile
         $this->track = $track;
     }
 
-    public function getTrackTitle()
+    public function getTitle()
     {
-        return basename($this->file_name);
-//        if($this->info) {
-//            return $this->info->getTitle();
-//        } else {
-//            return basename($this->file_name);
-//        }
+        //return basename($this->file_name);
+        if($this->track) {
+            return $this->track->getTitle();
+        } else {
+            return basename($this->file_name);
+        }
     }
 
     public function setChecksum($checksum)
