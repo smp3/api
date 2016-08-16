@@ -3,6 +3,12 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\MaxDepth;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Accessor;
 
 /**
  * @ORM\Entity
@@ -10,15 +16,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LibraryFile
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups("library")
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
+     *  @Groups("library")
      */
     protected $file_name;
 
@@ -30,6 +39,7 @@ class LibraryFile
 
     /**
      * @ORM\OneToOne(targetEntity="SMP3Bundle\Entity\Track", orphanRemoval=true) 
+     * @Groups("library")
      */
     protected $track;
 
@@ -41,12 +51,14 @@ class LibraryFile
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Album", cascade={"persist"})
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE")
+     *  @Groups("library")
      */
     protected $album;
 
     /**
      * @ORM\ManyToOne(targetEntity="SMP3Bundle\Entity\Artist", cascade={"persist"})
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id", onDelete="CASCADE")
+     *  @Groups("library")
      */
     protected $artist;
     public $track_title;

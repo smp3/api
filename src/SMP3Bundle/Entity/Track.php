@@ -3,6 +3,8 @@
 namespace SMP3Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity
@@ -15,16 +17,19 @@ class Track
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups("library")
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string")
+     * @Groups("library")
      */
     protected $title;
 
     /**
      * @ORM\Column(type="integer", nullable=true, options={"unsigned": true, "default": 0})
+     * @Groups("library")
      */
     protected $number;
 

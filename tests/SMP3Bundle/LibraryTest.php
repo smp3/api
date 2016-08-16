@@ -15,11 +15,18 @@ class LibraryTest extends TestCase
 
     public function testGetAll()
     {
-        $client = $this->makeTokenRequest('GET','/api/library', []);
-        $response = $client->getResponse();
-        $content = json_decode($response->getContent());
-        dump($content);
-        $this->assertEquals($response->getStatusCode(), 200);
+         
+        $this->getToken();
+//        $this->client->request('GET', '/api/library', [], [], [
+//            'HTTP_AUTHORIZATION' => "Bearer {$this->getToken()}",
+//            'CONTENT_TYPE' => 'application/json',
+//        ]);
+//        
+//        //$client = $this->makeTokenRequest('GET','/api/library', []);
+//        $response = $this->client->getResponse();
+//        $content = json_decode($response->getContent());
+//        dump($response->getContent());
+//        $this->assertEquals($response->getStatusCode(), 200);
         
     }
 }

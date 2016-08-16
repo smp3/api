@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\MimeType\FileBinaryMimeTypeGuesser;
 use SMP3Bundle\Entity\LibraryFile;
+use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,14 +19,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class LibraryController extends APIBaseController implements ClassResourceInterface
 {
-    protected $user, $artist_repository, $album_repository, $library_repository;
+    protected $user, $artistRepository, $albumRepository, $libraryRepository;
 
     public function setContainer(ContainerInterface $container = null)
     {
         parent::setContainer($container);
-        $this->artist_repository = $this->em->getRepository('SMP3Bundle:Artist');
-        $this->album_repository = $this->em->getRepository('SMP3Bundle:Album');
-        $this->library_repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
+        $this->artistRepository = $this->em->getRepository('SMP3Bundle:Artist');
+        $this->albumRepository = $this->em->getRepository('SMP3Bundle:Album');
+        $this->libraryRepository = $this->em->getRepository('SMP3Bundle:LibraryFile');
     }
 
     public function getArtistsAction()
@@ -37,18 +38,18 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
 
     public function getAlbumsAction(Request $request)
     {
-        $albums = $this->album_repository
-            ->findAllByUser($this->getUser(), $this->artist_repository->findByName($request->get('artist')));
+        $albums = $this->albumRepository
+            ->findAllByUser($this->getUser(), $this->artistRepository->findByName($request->get('artist')));
 
         return $this->handleView($this->view($albums));
     }
 
     public function getTree()
     {
-        $artists = $this->artist_repository->findAllByUser($this->getUser());
+        $artists = $this->artistRepository->findAllByUser($this->getUser());
 
-        $albums = $this->album_repository->findAllByUser($this->getUser());
-        $library = $this->library_repository->findByUser($this->getUser());
+        $albums = $this->albumRepository->findAllByUser($this->getUser());
+        $library = $this->libraryRepository->findByUser($this->getUser());
 
         foreach ($library as $lib_item) {
         }
@@ -60,17 +61,18 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         $findby = ['user' => $this->getUser()];
 
         if ($request->get('artist')) {
-            $findby['artist'] = $this->artist_repository->findByName($request->get('artist'));
+            $findby['artist'] = $this->artistRepository->findByName($request->get('artist'));
         }
 
         if ($request->get('album')) {
-            $findby['album'] = $this->album_repository->findByTitle($request->get('album'));
+            $findby['album'] = $this->albumRepository->findByTitle($request->get('album'));
         }
 
-        $files = $this->library_repository->findBy($findby);
-        $this->get('smp3.fileinfo')->addTrackTitles($files);
+        $files = $this->libraryRepository->findBy($findby);
+       // $this->get('smp3.fileinfo')->addTrackTitles($files);
         $view = View::create();
         $view->setData($files);
+        $view->setSerializationContext(SerializationContext::create()->setGroups(['library']));
 
         return $this->handleView($view);
     }
