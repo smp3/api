@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Accessor;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SMP3Bundle\Entity\LibraryFileRespository")
  * @ORM\Table(name="library_file")
  */
 class LibraryFile

@@ -14,11 +14,13 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+
 /**
  * @RouteResource("library")
  */
 class LibraryController extends APIBaseController implements ClassResourceInterface
 {
+
     protected $user, $artistRepository, $albumRepository, $libraryRepository;
 
     public function setContainer(ContainerInterface $container = null)
@@ -29,35 +31,32 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         $this->libraryRepository = $this->em->getRepository('SMP3Bundle:LibraryFile');
     }
 
-    public function getArtistsAction()
+    public function getArtistsAction(Request $request)
     {
-        $repository = $this->em->getRepository('SMP3Bundle:Artist');
-
-        return $this->handleView($this->view($repository->findAllByUser($this->getUser())));
+        
+        $pagingInfo = $this->getPagingInfo($request);
+        
+        $artists =  $this->artistRepository->findAllByUser($this->getUser(), $pagingInfo['max'], $pagingInfo['from']);
+        
+        return $this->handleView($this->view($artists));
     }
 
     public function getAlbumsAction(Request $request)
     {
+        $pagingInfo = $this->getPagingInfo($request);
+        
         $albums = $this->albumRepository
-            ->findAllByUser($this->getUser(), $this->artistRepository->findByName($request->get('artist')));
+            ->findAllByUser($this->getUser(), $this->artistRepository->findByName($request->get('artist')), 
+                $pagingInfo['max'], $pagingInfo['from']);
 
         return $this->handleView($this->view($albums));
     }
 
-    public function getTree()
-    {
-        $artists = $this->artistRepository->findAllByUser($this->getUser());
-
-        $albums = $this->albumRepository->findAllByUser($this->getUser());
-        $library = $this->libraryRepository->findByUser($this->getUser());
-
-        foreach ($library as $lib_item) {
-        }
-    }
-
     public function getAction(Request $request)
     {
-        /// $context = new SerializationContext();
+        
+        $pagingInfo = $this->getPagingInfo($request);
+        
         $findby = ['user' => $this->getUser()];
 
         if ($request->get('artist')) {
@@ -68,8 +67,9 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
             $findby['album'] = $this->albumRepository->findByTitle($request->get('album'));
         }
 
-        $files = $this->libraryRepository->findBy($findby);
-       // $this->get('smp3.fileinfo')->addTrackTitles($files);
+        $files = $this->libraryRepository->findBy($findby, [], $pagingInfo['max'], $pagingInfo['from']);
+
+
         $view = View::create();
         $view->setData($files);
         $view->setSerializationContext(SerializationContext::create()->setGroups(['library']));
@@ -78,12 +78,12 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
     }
 
     public function getDiscoverAction()
-    {   
-        
+    {
+
         $msg = [
-         'user_id'=>$this->getUser()->getId(),   
+            'user_id' => $this->getUser()->getId(),
         ];
-        
+
         $this->get('old_sound_rabbit_mq.discover_producer')->publish(json_encode($msg));
         return $this->handleView($this->view(0, 200));
     }
@@ -94,11 +94,8 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
     public function getStreamAction($file_id)
     {
         $file = $this->em->getRepository('SMP3Bundle:LibraryFile')->findOneBy(array('id' => $file_id));
-        $file_name = $file->getUser()->getPath().'/'.$file->getFileName();
+        $file_name = $file->getUser()->getPath() . '/' . $file->getFileName();
         $file_contents = new File($file_name);
-
-//        $mime_guess = new FileBinaryMimeTypeGuesser(); 
-//        $mime = $mime_guess->guess($file_name);
 
         $response = new BinaryFileResponse($file_contents);
         $response->headers->set('Content-Type', 'text/plain');
