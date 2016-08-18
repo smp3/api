@@ -2,10 +2,8 @@
 
 namespace SMP3Bundle\Service;
 
-/**
- * TODO: change name to YTService
- */
-class YTFetchService
+
+class YTService
 {
 
     const WATCH_PART = "https://www.youtube.com/watch?v=";
@@ -38,7 +36,7 @@ class YTFetchService
 
     public function getVideoId($url)
     {
-        $id = str_replace(YTFetchService::WATCH_PART, "", $url);
+        $id = str_replace(YTService::WATCH_PART, "", $url);
         return $id;
     }
 
