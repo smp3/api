@@ -4,6 +4,7 @@ namespace SMP3Bundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,12 +15,31 @@ class FetchController extends APIBaseController implements ClassResourceInterfac
 {
 
     /**
+     * @Get("fetch/yt")
+     */
+    public function getYTInfoAction(Request $request)
+    {
+        $url = $request->get('url');
+
+        $ytFetchService = $this->get('smp3.ytfetch');
+
+        $id = $ytFetchService->getVideoId($url);
+        $ytinfo = $ytFetchService->getVideoInfo($url);
+        $ninfo = $ytFetchService->getNoEmbedInfo($id);
+
+        $info = [
+            'ytinfo' => $ytinfo,
+            'info' => $ninfo,
+        ];
+
+        return $this->handleView($this->view($info, 200));
+    }
+
+    /**
      * @Post("fetch/yt")
      */
     public function postYTAction(Request $request)
     {
-
-     
 
         $msg = [
             'url' => $request->get('url'),

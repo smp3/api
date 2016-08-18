@@ -2,48 +2,74 @@
 
 namespace SMP3Bundle\Service;
 
+/**
+ * TODO: change name to YTService
+ */
 class YTFetchService
 {
+
+    const WATCH_PART = "https://www.youtube.com/watch?v=";
+
+    protected $apiKey;
+
+    public function __construct($apiKey)
+    {
+        $this->apiKey = $apiKey; //No embed will be used, no need for apiKey
+    }
 
     protected function findStreamData(Array $streams, $format)
     {
         foreach ($streams as $stream) {
             $data = [];
-            parse_str($stream, $data); 
+            parse_str($stream, $data);
 
-            if (stripos($data['type'], $format) !== false) { 
+            if (stripos($data['type'], $format) !== false) {
                 return $data;
             }
         }
     }
 
-    public function fetchVideo($url, $targetDir, $format = 'mp4')
+    public function getNoEmbedInfo($id)
     {
-        $watchPart = "https://www.youtube.com/watch?v=";
+        $url = 'https://noembed.com/embed?url=https://www.youtube.com/watch?v=' . $id . '&alt=json';
+        $info = json_decode(file_get_contents($url));
+        return (Array) $info;
+    }
 
-        $id = str_replace($watchPart, "", $url);
+    public function getVideoId($url)
+    {
+        $id = str_replace(YTFetchService::WATCH_PART, "", $url);
+        return $id;
+    }
+
+    public function getVideoInfo($url)
+    {
+        $id = $this->getVideoId($url);
 
         $info = [];
-
         $contents = file_get_contents("http://youtube.com/get_video_info?video_id=" . $id);
-        //TODO: try to fetch the title from $info
-        
         parse_str($contents, $info);
-        $streams = $info['url_encoded_fmt_stream_map'];
-        $streams = explode(',', $streams);
+
+        return $info;
+    }
+
+    public function fetchVideo($url, $targetDir, $baseFn, $format = 'mp4')
+    {
+
+        $info = $this->getVideoInfo($url);
+
+        $streams = explode(',', $info['url_encoded_fmt_stream_map']);
 
         $data = $this->findStreamData($streams, $format);
         $video = fopen($data['url'], 'r');
+
+        $fn = $targetDir . '/' . $baseFn . '.' . $format;
         
-        $fn = $targetDir . '/' . md5(time()) . '.' . $format;
         $file = fopen($fn, 'w');
-        
-        stream_copy_to_stream($video, $file); //copy it to the file
+        stream_copy_to_stream($video, $file); 
         fclose($video);
         fclose($file);
 
-
-        //echo "$id done \n";
         return $fn;
     }
 }

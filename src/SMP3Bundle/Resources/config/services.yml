@@ -21,6 +21,8 @@ services:
     
     smp3.ytfetch:
         class: SMP3Bundle\Service\YTFetchService
+        arguments:
+            - '%google_apikey%'
     
     smp3.transcode:
         class: SMP3Bundle\Service\TranscodeService

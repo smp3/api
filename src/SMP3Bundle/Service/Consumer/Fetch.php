@@ -39,13 +39,22 @@ class Fetch implements ConsumerInterface
         
         echo "Fetching...\n";
         
-        $fetchedFn = $this->ytFetchService->fetchVideo($messageData['url'], $targetDir);
+        $id = $this->ytFetchService->getVideoId($messageData['url']);
+        $info = $this->ytFetchService->getNoEmbedInfo($id);
+        
+        if(array_key_exists('title', $info)) {
+            $fn = $info['title'];
+        } else {
+            $fn = $id;
+        }
+        
+        $fetchedFn = $this->ytFetchService->fetchVideo($messageData['url'], $targetDir, $fn);
         
         echo "Fetched to $fetchedFn \n";
      
         echo "Converting to MP3...\n";
         
-        $this->transcodeService->convert($fetchedFn, $targetDir.'/test');
+        $this->transcodeService->convert($fetchedFn, $targetDir.'/'.$fn);
         
         echo "Done.\n";
     }
