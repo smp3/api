@@ -23,11 +23,18 @@ class User extends BaseUser
      * @ORM\Column(type="string", nullable=True)
      */
     protected $path;
+    
+    /**
+     * @ORM\Column(type="string", nullable=True)
+     * Note: $uploadPath is relative to $path
+     */
+    protected $uploadPath;
 
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+        
+        $this->uploadPath = "";
     }
 
     public function getPath()
@@ -38,5 +45,19 @@ class User extends BaseUser
     public function setPath($path)
     {
         $this->path = $path;
+        
+        return $this;
+    }
+    
+    public function getUploadPath()
+    {
+        return $this->uploadPath;
+    }
+    
+    public function setUploadPath($uploadPath)
+    {
+        $this->uploadPath = $uploadPath;
+        
+        return $this;
     }
 }

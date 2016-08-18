@@ -129,9 +129,17 @@ old_sound_rabbit_mq:
         discover:
             connection:       default
             exchange_options: {name: 'smp3-discover-queue', type: direct}
+        fetch:
+            connection:       default
+            exchange_options: {name: 'smp3-fetch-queue', type: direct}
     consumers:
         discover:
             connection:       default
             exchange_options: {name: 'smp3-discover-queue', type: direct}
             queue_options:    {name: 'smp3-discover-queue'}
-            callback:         smp3.discover
+            callback:         smp3.consumer.discover
+        fetch:
+            connection:       default
+            exchange_options: {name: 'smp3-fetch-queue', type: direct}
+            queue_options:    {name: 'smp3-fetch-queue'}
+            callback:         smp3.consumer.fetch 

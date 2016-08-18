@@ -19,10 +19,22 @@ services:
             - '@doctrine'
             - '@security.token_storage'
     
-    smp3.discover:
+    smp3.ytfetch:
+        class: SMP3Bundle\Service\YTFetchService
+    
+    smp3.transcode:
+        class: SMP3Bundle\Service\TranscodeService
+    
+    smp3.consumer.fetch:
+        class: SMP3Bundle\Service\Consumer\Fetch
+        arguments:
+            - '@doctrine'
+            - '@smp3.ytfetch'
+            - '@smp3.library'
+            - '@smp3.transcode'
+    
+    smp3.consumer.discover:
         class: SMP3Bundle\Service\Consumer\Discover
         arguments: 
             - '@doctrine'
             - '@smp3.library'
-    
-    

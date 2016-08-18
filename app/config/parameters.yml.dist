@@ -17,3 +17,4 @@ parameters:
     jwt_token_ttl: 86400
     discoverable_exts: ['mp3', 'mp4', 'ogg', 'm4a']
     library_item_limit: 1000
+    tmp_dir: /tmp

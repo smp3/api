@@ -10,3 +10,11 @@ playlist:
 users:
     type: rest
     resource: SMP3Bundle\Controller\UserController
+
+fetch:
+    type: rest
+    resource: SMP3Bundle\Controller\FetchController
+    
+tasks:
+    type: rest
+    resource: SMP3Bundle\Controller\TaskController

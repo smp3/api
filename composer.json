@@ -37,7 +37,8 @@
         "lexik/jwt-authentication-bundle": "*",
         "nelmio/cors-bundle": "^1.4",
         "james-heinrich/getid3": "^1.9.10",
-        "php-amqplib/rabbitmq-bundle": "^1.9"
+        "php-amqplib/rabbitmq-bundle": "^1.9",
+        "php-ffmpeg/php-ffmpeg": "~0.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

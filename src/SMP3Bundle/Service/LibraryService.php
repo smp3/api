@@ -11,14 +11,16 @@ use SMP3Bundle\Entity\Artist;
 
 class LibraryService
 {
+
     protected $container,
-            $exts = ['mp3', 'mp4', 'ogg', 'm4a'],
-            $debug = false
+        $exts = ['mp3', 'mp4', 'ogg', 'm4a'],
+        $debug = false
+
     ;
 
     public function __construct($em, $fileInfo, $configService)
     {
-        
+
         $this->em = $em->getManager();
         $this->fileInfo = $fileInfo;
         $this->configService = $configService;
@@ -87,13 +89,13 @@ class LibraryService
 
     protected function removeOrphaned($user)
     {
-        
+
         $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
         $all = $repository->findByUser($user);
         $counter = 0;
 
         foreach ($all as $file) {
-            if (!file_exists($user->getPath().'/'.$file->getFileName())) {
+            if (!file_exists($user->getPath() . '/' . $file->getFileName())) {
                 $this->em->remove($file);
                 ++$counter;
             }
@@ -107,29 +109,35 @@ class LibraryService
     protected function debug_msg($msg)
     {
         if ($this->debug) {
-            echo $msg."\n";
+            echo $msg . "\n";
         }
     }
 
-    public function discover(User $user)
+    public function discover(User $user, $subDir = null)
     {
         $return = new \stdClass();
         $stime = microtime(true);
-        //$info_service = $this->container->get('smp3.fileinfo');
+
+        $path = $user->getPath();
+
+        if ($subDir != null) {
+            $path .= '/'.$subDir;
+        }
+
         $finder = new Finder();
-        $finder->files()->in($user->getPath());
+        $finder->files()->in($path);
         $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
 
         $this->removeOrphaned($user);
 
         $counter = 0;
         foreach ($finder as $file) {
-            $this->debug_msg('Processing: '.$user->getPath().'/'.$file->getRelativePathname());
+            $this->debug_msg('Processing: ' . $path . '/' . $file->getRelativePathname());
             if (!in_array($file->getExtension(), $this->configService->getDiscoverableExts())) {
                 continue;
             }
 
-            $contents = file_get_contents($user->getPath().'/'.$file->getRelativePathname());
+            $contents = file_get_contents($path . '/' . $file->getRelativePathname());
             $checksum = crc32($contents);
 
             $lf = $repository->findOneBy(array('checksum' => $checksum));
