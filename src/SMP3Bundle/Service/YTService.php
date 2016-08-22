@@ -12,7 +12,7 @@ class YTService
 
     public function __construct($apiKey)
     {
-        $this->apiKey = $apiKey; //No embed will be used, no need for apiKey
+        $this->apiKey = $apiKey; //Noembed is used, no need for apiKey
     }
 
     protected function findStreamData(Array $streams, $format)

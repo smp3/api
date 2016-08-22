@@ -1,13 +1,19 @@
 services:
+    smp3.checksum:
+        class: SMP3Bundle\Service\ChecksumService
+    
     smp3.fileinfo:
         class: SMP3Bundle\Service\FileInfoService
         arguments: [] 
+    
     smp3.library:
         class: SMP3Bundle\Service\LibraryService
         arguments: 
             - '@doctrine'
             - '@smp3.fileinfo'
             - '@smp3.config'
+            - '@smp3.checksum'
+    
     smp3.config:
         class: SMP3Bundle\Service\ConfigService
         arguments:

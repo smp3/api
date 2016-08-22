@@ -40,9 +40,20 @@ class FetchController extends APIBaseController implements ClassResourceInterfac
      */
     public function postYTAction(Request $request)
     {
+        $transcodeService = $this->get('smp3.transcode');
+        $transcodeFormat = $request->get('transcode_format', null);
+
+        if ($transcodeFormat && !$transcodeService->hasFormat($transcodeFormat)) {
+            $message = sprintf('Transcoding to %s format is not supported', $transcodeFormat);
+            return $this->handleView($this->view(['ok' => false, 'message' => $message], 500));
+        }
+
+
+
 
         $msg = [
             'url' => $request->get('url'),
+            'transcodeFormat' => $transcodeFormat,
             'userId' => $this->getUser()->getId(),
         ];
 

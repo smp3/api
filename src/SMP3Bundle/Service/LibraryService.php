@@ -3,6 +3,7 @@
 namespace SMP3Bundle\Service;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use SMP3Bundle\Entity\User;
 use SMP3Bundle\Entity\LibraryFile;
 use SMP3Bundle\Entity\Track;
@@ -18,12 +19,13 @@ class LibraryService
 
     ;
 
-    public function __construct($em, $fileInfo, $configService)
+    public function __construct($em, $fileInfo, $configService, $checksumService)
     {
 
         $this->em = $em->getManager();
         $this->fileInfo = $fileInfo;
         $this->configService = $configService;
+        $this->checksumService = $checksumService;
     }
 
     public function setDebug($debug)
@@ -121,7 +123,7 @@ class LibraryService
         $path = $user->getPath();
 
         if ($subDir != null) {
-            $path .= '/'.$subDir;
+            $path .= '/' . $subDir;
         }
 
         $finder = new Finder();
@@ -132,14 +134,15 @@ class LibraryService
 
         $counter = 0;
         foreach ($finder as $file) {
-            $this->debug_msg('Processing: ' . $path . '/' . $file->getRelativePathname());
+
+            $filePath = $path . '/' . $file->getRelativePathname();
+            $this->debug_msg('Processing: ' . $filePath);
+
             if (!in_array($file->getExtension(), $this->configService->getDiscoverableExts())) {
                 continue;
             }
 
-            $contents = file_get_contents($path . '/' . $file->getRelativePathname());
-            $checksum = crc32($contents);
-
+            $checksum = $this->checksumService->fileChecksum($filePath);
             $lf = $repository->findOneBy(array('checksum' => $checksum));
 
             if (!$lf) {
@@ -162,6 +165,37 @@ class LibraryService
         $return->counter = $counter;
 
         return $return;
+    }
+
+    public function addLibraryFile(User $user, $filePath, $fileExtension = null, $noChecksumCheck = false)
+    {
+        $repository = $this->em->getRepository('SMP3Bundle:LibraryFile');
+        
+        if ($fileExtension && !in_array($fileExtension, $this->configService->getDiscoverableExts())) {
+            return;
+        }
+
+        $checksum = $this->checksumService->fileChecksum($filePath);
+        
+        if ($noChecksumCheck) {
+            $lf = null;
+        } else {
+            $lf = $repository->findOneBy(array('checksum' => $checksum));
+        }
+
+        if (!$lf) {
+            $lf = new LibraryFile();
+            /*
+             * Checksum is the same so the info data is the same
+             */
+            $info_data = $this->fileInfo->getTagInfo($filePath);
+        } else {
+            $info_data = null;
+        }
+
+        $fileDir = dirname($filePath);
+        $fileName = str_replace($fileDir, "", $filePath);
+        $this->setLibraryFile($lf, $user, new SplFileInfo($fileName, $fileDir, $filePath), $info_data, $checksum);
     }
 
     public function clear()
