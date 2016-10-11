@@ -5,7 +5,6 @@
 /app/logs/*
 !app/logs/.gitkeep
 /app/phpunit.xml
-/bin/
 /composer.phar
 /vendor/
 /web/bundles/
@@ -14,4 +13,3 @@
 /web/js
 /nbproject/private/
 composer.lock
-/var
