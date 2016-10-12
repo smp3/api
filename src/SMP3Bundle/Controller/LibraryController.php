@@ -80,6 +80,8 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
     public function getDiscoverAction()
     {
 
+        $taskService = $this->get('smp3.tasks');
+        
         $msg = [
             'user_id' => $this->getUser()->getId(),
         ];

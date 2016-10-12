@@ -21,13 +21,15 @@ class TaskController extends APIBaseController implements ClassResourceInterface
         $this->taskRepository = $this->em->getRepository('SMP3Bundle:Task');
     }
 
-    public function getTaskStatus(Task $task)
+    public function getTaskStatusAction(Task $task)
     {
         
     }
 
-    public function getTasks(Request $request)
+    public function getAction(Request $request)
     {
-        
+          
+        $tasks = $this->taskRepository->findBy(['user'=>$this->getUser()]);
+        return $this->handleView($this->view($tasks));
     }
 }

@@ -33,6 +33,11 @@ services:
     smp3.transcode:
         class: SMP3Bundle\Service\TranscodeService
     
+    smp3.tasks:
+        class: SMP3Bundle\Service\TaskService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    
     smp3.consumer.fetch:
         class: SMP3Bundle\Service\Consumer\Fetch
         arguments:
