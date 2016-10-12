@@ -37,6 +37,7 @@ services:
         class: SMP3Bundle\Service\TaskService
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@service_container'
     
     smp3.consumer.fetch:
         class: SMP3Bundle\Service\Consumer\Fetch

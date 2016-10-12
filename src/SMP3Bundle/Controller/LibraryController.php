@@ -85,7 +85,8 @@ class LibraryController extends APIBaseController implements ClassResourceInterf
         $msg = [
             'user_id' => $this->getUser()->getId(),
         ];
-
+        
+        $taskService->enqueueTask($this->getUser(), 'discover');
         $this->get('old_sound_rabbit_mq.discover_producer')->publish(json_encode($msg));
         return $this->handleView($this->view(0, 200));
     }

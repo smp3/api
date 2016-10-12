@@ -52,12 +52,13 @@ class Task
     protected $statusChangeDateTime;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=True)
      */
     protected $additionalData;
 
-    public function __construct($type)
+    public function __construct($type, $user)
     {
+        $this->setUser($user);
         $this->setType($type);
         $this->createdDateTime = new \DateTime('now');
         $this->setStatus(Task::STATUS_PENDING);
