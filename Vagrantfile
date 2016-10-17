@@ -45,6 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Synced Folders
   # --------------------
   config.vm.synced_folder ".", "/var/www/vagrant", :mount_options => [ "dmode=777", "fmode=777" ]
+  config.vm.synced_folder "~/mp3", "/mp3", :mount_options => [ "dmode=777", "fmode=777" ]
 
 
 
@@ -52,6 +53,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # --------------------
 config.vm.provision "shell", path: "VagrantProvision/init.sh"
 config.vm.provision "file", source: "VagrantProvision/symfony.conf", destination: "/home/vagrant/symfony.conf"
+config.vm.provision "file", source: "VagrantProvision/pma.conf", destination: "/home/vagrant/pma.conf"
+config.vm.provision "file", source: "VagrantProvision/ports.conf", destination: "/home/vagrant/ports.conf"
 config.vm.provision "file", source: "VagrantProvision/apache.php.ini", destination: "/home/vagrant/php.ini"
 config.vm.provision "shell", path: "VagrantProvision/apache.sh"
 config.vm.provision "shell", path: "VagrantProvision/run.sh", run: "always"

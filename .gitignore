@@ -11,6 +11,6 @@
 /web/assets/
 *.php~
 /web/js
-/nbproject/private/
 composer.lock
-/vagrant
+/.vagrant
+/nbproject

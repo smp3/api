@@ -1,1 +1,0 @@
-{"virtualbox":{"/var/www/vagrant":{"mount_options":["dmode=777","fmode=777"],"guestpath":"/var/www/vagrant","hostpath":"/var/www/html/smp3/api","disabled":false,"__vagrantfile":true}}}
