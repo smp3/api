@@ -1,5 +1,5 @@
 <?php
-
+#
 namespace SMP3Bundle\Service\Consumer;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -21,8 +21,9 @@ class Discover implements ConsumerInterface
         //dump($user);
 
         
+  
+        $counter = $this->libraryService->discover($user);   
 
-        $counter = $this->libraryService->discover($user);
-        dump($counter);
+        var_dump($counter);
     }
 }
